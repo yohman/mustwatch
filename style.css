@@ -93,3 +93,15 @@
 @media(max-width:500px){.list-now{gap:8px}.list-now span{font-size:8px}.list-now b{font-size:13px}}
 @media(max-width:900px){.list-game:has(.live-match-info) .list-content{display:contents!important;grid-column:auto!important;grid-row:auto!important}.live-match-info{grid-column:1/-1!important;width:100%!important}.live-match-info .tab-final-score,.live-match-info .incident-list{width:100%!important}}
 @media(max-width:650px){.wordmark{white-space:nowrap;font-size:28px!important}.masthead{align-items:center}.team-ribbon{padding-left:14px!important;padding-right:14px!important}.ribbon-fixed{background:#24211c}#reveal-all{top:104px;left:16px}.now-line b small{font-size:7px}}
+
+/* The live interval is a time region, not a replacement for individual matches. */
+#live-zone{position:absolute;z-index:4;top:0;bottom:0;background:rgba(233,107,69,.055);border-left:1px solid rgba(233,107,69,.48);border-right:1px solid rgba(233,107,69,.48);pointer-events:none}
+#live-zone[hidden]{display:none}
+#live-zone span{position:absolute;top:calc(50% + 18px);left:50%;transform:translateX(-50%);white-space:nowrap;color:#e96b45;font:9px "DM Mono",monospace;letter-spacing:.14em}
+#live-zone span:before{content:"";display:inline-block;width:6px;height:6px;margin:0 6px 1px 0;border-radius:50%;background:#e96b45;box-shadow:0 0 0 3px rgba(233,107,69,.13);animation:live-pulse 1.25s ease-in-out infinite}
+
+/* Keep the shared view switch reachable while a small-screen masthead scrolls away. */
+@media(max-width:650px){
+  .view-toggle{display:flex!important;position:fixed!important;z-index:10005!important;right:14px!important;bottom:14px!important;background:#24211c!important;border:1px solid rgba(243,239,229,.24)!important;box-shadow:0 8px 24px rgba(0,0,0,.3)!important}
+  .view-toggle button{display:block!important;padding:8px 11px!important;font-size:10px!important}
+}
