@@ -58,3 +58,24 @@
 .list-meta{min-width:0!important;width:100%}
 .list-meta small{max-width:100%!important}
 @media(max-width:900px){.list-game{grid-template-columns:36px minmax(0,1.65fr) minmax(58px,.55fr)!important}.list-meta{min-width:0!important;width:100%!important}}
+
+/* Shared controls and live-state treatment. */
+.list-game>strong[data-watch-toggle]{display:grid!important;place-items:center!important;width:36px!important;height:36px!important;margin:1px 0 0!important;padding:0!important;border:1px solid rgba(233,107,69,.65)!important;background:#1b1916!important;color:#f3efe5!important;font:600 22px/.9 Fraunces,Georgia,serif!important;letter-spacing:0!important;cursor:pointer!important;transition:background .18s ease,color .18s ease,transform .18s ease}
+.list-game>strong[data-watch-toggle]:hover{background:#e96b45!important;color:#11110f!important;transform:translateY(-1px)}
+.list-game.past .list-content>small{display:none!important}
+.team-table-context i[data-standing]{font-size:8px!important}.team-table-context i[data-standing]::after{content:none!important}
+.team-ribbon{display:flex!important;align-items:center!important;overflow:hidden!important;white-space:normal!important}
+.ribbon-fixed{display:flex;align-items:center;flex:0 0 auto;gap:3px;padding-right:8px;background:#24211c;box-shadow:8px 0 12px #24211c;z-index:2}
+.ribbon-scroll{display:flex;align-items:center;gap:5px;min-width:0;overflow-x:auto;overflow-y:hidden;padding:1px 2px 5px;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+.ribbon-fixed button{flex:0 0 auto}
+#reveal-all{position:fixed;z-index:19;top:108px;left:28px;background:#1b1916;border:1px solid rgba(243,239,229,.2);color:#f3efe5;padding:7px 10px;font:9px "DM Mono",monospace;letter-spacing:.12em;cursor:pointer}
+#reveal-all:hover{border-color:#e96b45;color:#e96b45}.view-list #reveal-all{display:none!important}
+.now-line b{display:flex;flex-direction:column;gap:3px}.now-line b small{font:8px "DM Mono",monospace;letter-spacing:.03em;color:rgba(233,107,69,.75);white-space:nowrap}
+.live-indicator{display:inline-flex;align-items:center;gap:5px;color:#e96b45;font:9px "DM Mono",monospace;letter-spacing:.1em}.live-indicator:before{content:"";width:6px;height:6px;border-radius:50%;background:#e96b45;box-shadow:0 0 0 3px rgba(233,107,69,.13)}
+.live-game{border-top-color:rgba(233,107,69,.65)!important;background:rgba(233,107,69,.055)!important;box-shadow:inset 2px 0 #e96b45}.live-match-info{width:100%;margin:12px 0 0}.live-match-info .tab-final-score{margin-top:0!important}.live-match-info .incident-list{margin-top:8px!important}.live-match-info p{margin:10px 0!important;color:#cfc2b5!important;font:11px/1.45 Inter,Arial,sans-serif!important;letter-spacing:0}.live-tabs{margin-top:10px!important}
+.list-game:has(.live-match-info) .list-content{grid-column:1/-1!important;grid-row:2!important;width:100%!important}.list-game:has(.live-match-info){row-gap:8px!important}
+.match-tabs{display:inline-flex!important;gap:5px!important;border:0!important;padding:2px!important;background:#1a1916!important}.match-tabs button{border:1px solid rgba(243,239,229,.2)!important;border-bottom:1px solid rgba(243,239,229,.2)!important;background:#201f1b!important;color:#b6afa3!important;padding:7px 10px!important}.match-tabs button:hover{border-color:rgba(233,107,69,.65)!important;background:#29251f!important;color:#f3efe5!important}.match-tabs button.active,.list-game:has(.live-match-info) .live-tabs [data-live-info],.list-game:has(.lineups) .live-tabs [data-lineup]{border-color:#e96b45!important;background:#e96b45!important;color:#11110f!important}
+.match-tabs button:last-child{border-right:1px solid rgba(243,239,229,.2)!important}
+.match-tabs button.active:last-child,.list-game:has(.lineups) .live-tabs [data-lineup]:last-child{border-right-color:#e96b45!important}
+@media(max-width:900px){.list-game:has(.live-match-info) .list-content{display:contents!important;grid-column:auto!important;grid-row:auto!important}.live-match-info{grid-column:1/-1!important;width:100%!important}.live-match-info .tab-final-score,.live-match-info .incident-list{width:100%!important}}
+@media(max-width:650px){.wordmark{white-space:nowrap;font-size:28px!important}.masthead{align-items:center}.team-ribbon{padding-left:14px!important;padding-right:14px!important}.ribbon-fixed{background:#24211c}#reveal-all{top:104px;left:16px}.now-line b small{font-size:7px}}
