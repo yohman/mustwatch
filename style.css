@@ -104,6 +104,17 @@
 .list-game.past .team-table-context{display:none!important}
 .list-game.past:has(.tab-final-score) .team-table-context{display:flex!important}
 
+/* Shared incident language: a team badge carries the event mark beneath it. */
+.event-badge{display:grid;justify-items:center;align-self:start;min-width:21px}
+.event-badge img{width:19px;height:19px;object-fit:contain}
+.event-badge.fallback{width:19px;height:19px;border:1px solid rgba(243,239,229,.35);border-radius:50%}
+.incident{grid-template-columns:38px 23px 26px minmax(0,1fr)!important;align-items:start!important}.incident.sub,.incident.injury{background:rgba(243,239,229,.022)}
+.event-mark{padding-top:3px;color:#d7d0c4;font:8px/1 "DM Mono",monospace;white-space:nowrap}.incident.sub .event-mark{color:#7ab993;font-size:13px;padding-top:1px}.incident.injury .event-mark{color:#c9a68d}.incident.yellow .event-mark{padding-top:2px}.incident.red .event-mark{padding-top:2px}
+.lineups h4{margin:13px 0 3px;color:#969287;font:8px "DM Mono",monospace;letter-spacing:.14em}.lineups h4:not(:first-of-type){border-top:1px solid rgba(243,239,229,.11);padding-top:11px}
+.lineup-player{grid-template-columns:25px 18px minmax(0,1fr) auto auto!important}.lineup-player.sub{opacity:.72}.lineup-player.sub:before{content:"SUB";position:absolute;left:-1px;top:0;color:#969287;font:7px "DM Mono",monospace;letter-spacing:.1em}
+.player-events{display:inline-flex;align-items:center;flex-wrap:wrap;justify-content:flex-end;gap:3px;max-width:110px}.lineup-player .player-events{grid-column:4}.lineup-player small{grid-column:5}.player-event{display:inline-flex;align-items:center;gap:2px;font:8px/1 "DM Mono",monospace;font-style:normal;white-space:nowrap;color:#d7d0c4}.player-event.goal{color:#e96b45;font-size:10px}.player-event.yellow{color:#e1bd4c}.player-event.red,.player-event.sub-out{color:#df6952}.player-event.injury{color:#c9a68d}.player-event.sub-in{color:#7ab993}.card-glyph{display:inline-block;width:6px;height:10px;border-radius:1px;background:#e1bd4c;transform:rotate(8deg)}.card-glyph.red{background:#df6952}
+@media(max-width:520px){.lineup-player{grid-template-columns:18px 14px minmax(0,1fr) auto auto!important}.player-events{justify-content:flex-end;max-width:80px}.lineup-player.sub:before{left:0}.player-event{font-size:7px}.player-event.goal{font-size:9px}}
+
 /* Keep the shared view switch reachable while a small-screen masthead scrolls away. */
 @media(max-width:650px){
   .view-toggle{display:flex!important;position:fixed!important;z-index:10005!important;right:14px!important;bottom:14px!important;background:#24211c!important;border:1px solid rgba(243,239,229,.24)!important;box-shadow:0 8px 24px rgba(0,0,0,.3)!important}
