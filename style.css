@@ -100,6 +100,10 @@
 #live-zone span{position:absolute;top:calc(50% + 18px);left:50%;transform:translateX(-50%);white-space:nowrap;color:#e96b45;font:9px "DM Mono",monospace;letter-spacing:.14em}
 #live-zone span:before{content:"";display:inline-block;width:6px;height:6px;margin:0 6px 1px 0;border-radius:50%;background:#e96b45;box-shadow:0 0 0 3px rgba(233,107,69,.13);animation:live-pulse 1.25s ease-in-out infinite}
 
+/* Past-team records and standings are result context: reveal them with Results. */
+.list-game.past .team-table-context{display:none!important}
+.list-game.past:has(.tab-final-score) .team-table-context{display:flex!important}
+
 /* Keep the shared view switch reachable while a small-screen masthead scrolls away. */
 @media(max-width:650px){
   .view-toggle{display:flex!important;position:fixed!important;z-index:10005!important;right:14px!important;bottom:14px!important;background:#24211c!important;border:1px solid rgba(243,239,229,.24)!important;box-shadow:0 8px 24px rgba(0,0,0,.3)!important}
