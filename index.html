@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#11110f">
+  <title>Must Watch — Gameplot</title>
+  <link rel="preconnect" href="https://site.api.espn.com">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main id="app">
+    <header class="masthead">
+      <a class="wordmark" href="#" aria-label="Must Watch home">MUST <i>WATCH</i></a>
+      <p class="descriptor">Premier League, mapped by<br>what deserves your time.</p>
+      <nav id="team-ribbon" class="team-ribbon" aria-label="Filter teams"></nav>
+      <div class="team-filter"><button id="team-toggle" class="team-toggle">TEAMS</button><div id="team-picker" class="team-picker" hidden><input id="team-search" type="search" placeholder="Filter teams" aria-label="Filter teams"><div id="team-results" class="team-results"></div></div></div>
+      <div class="masthead-actions"><div class="view-toggle" aria-label="View mode"><button data-view="map">MAP</button><button data-view="list" class="active">LIST</button></div><button id="reveal-all" class="reveal-all">REVEAL ALL</button><button id="now-button" class="now-button">NOW <span></span></button></div>
+    </header>
+    <div id="team-hover-label" class="team-hover-label" hidden></div>
+    <div id="team-preview" class="team-preview" hidden></div>
+    <section class="plot-shell" aria-label="Gameplot, time horizontally and excitement vertically">
+      <div id="deck-container"></div>
+      <div id="focus-window" aria-hidden="true"></div><div id="focus-ticks" aria-hidden="true"></div>
+      <div class="axis axis-left" aria-hidden="true">
+        <span class="y100">100 <i>ESSENTIAL</i></span><span class="y75">75 <i>STRONG</i></span>
+        <span class="y50">50 <i>HIDDEN / NEUTRAL</i></span><span class="y25">25 <i>LOW</i></span>
+      </div>
+      <div id="time-axis" class="time-axis" aria-hidden="true"></div>
+      <div id="now-line" class="now-line" aria-hidden="true"><b>NOW</b></div>
+      <div class="hint">DRAG TO EXPLORE <span>·</span> SCROLL TO ZOOM</div>
+      <div id="loading" class="loading">Loading the season</div>
+      <div id="error" class="error" hidden></div>
+    </section>
+    <section id="list-shell" class="list-shell" hidden aria-label="Chronological fixture list"></section>
+  </main>
+  <section id="match-info" class="match-info" hidden aria-live="polite"></section>
+  <script src="https://unpkg.com/deck.gl@9.1.12/dist.min.js"></script>
+  <script src="js/watchScore.js"></script>
+  <script src="js/anticipation.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/gameplot.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
