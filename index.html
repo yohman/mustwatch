@@ -13,9 +13,10 @@
     <header class="masthead">
       <a class="wordmark" href="#" aria-label="Must Watch home">MUST <i>WATCH</i></a>
       <p class="descriptor">Premier League, mapped by<br>what deserves your time.</p>
+      <nav id="league-switcher" class="league-switcher" aria-label="Choose league"></nav>
       <nav id="team-ribbon" class="team-ribbon" aria-label="Filter teams"></nav>
       <div class="team-filter"><button id="team-toggle" class="team-toggle">TEAMS</button><div id="team-picker" class="team-picker" hidden><input id="team-search" type="search" placeholder="Filter teams" aria-label="Filter teams"><div id="team-results" class="team-results"></div></div></div>
-      <div class="masthead-actions"><div class="view-toggle" aria-label="View mode"><button data-view="map">MAP</button><button data-view="list" class="active">LIST</button></div><button id="now-button" class="now-button">GO TO NOW <span></span></button></div>
+      <div class="masthead-actions"><div class="view-toggle" aria-label="View mode"><button data-view="map">MAP</button><button data-view="list" class="active">LIST</button></div><button id="now-button" class="now-button" aria-label="Go to now">NOW <span aria-hidden="true">↗</span></button></div>
     </header>
     <button id="reveal-all" class="reveal-all">REVEAL ALL</button>
     <div id="team-hover-label" class="team-hover-label" hidden></div>

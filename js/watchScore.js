@@ -202,7 +202,7 @@ window.WatchScore = (() => {
     if ((game.events || []).some(event => event.type === 'red')) reasons.push('Red-card turning point');
     const stats = result?.diagnostics?.stats || statistics(game);
     if (Number(stats.home.shotsOnTarget) + Number(stats.away.shotsOnTarget) >= 10) reasons.push('High-pressure chance creation');
-    if (!reasons.length && Math.abs(Number(game.homeScore) - Number(game.awayScore)) <= 1) reasons.push('A closely contested Premier League match');
+    if (!reasons.length && Math.abs(Number(game.homeScore) - Number(game.awayScore)) <= 1) reasons.push('A closely contested league match');
     if (!reasons.length) reasons.push('A match shaped by its decisive moments');
     return reasons.slice(0, 4);
   }
