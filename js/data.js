@@ -39,7 +39,23 @@ window.EPLData = (() => {
       (competition?.competitors || []).forEach(team => { if (team.homeAway === 'home' && team.score != null) game.homeScore = Number(team.score); if (team.homeAway === 'away' && team.score != null) game.awayScore = Number(team.score); });
       game.summary = summary; game.injuries = summary.injuries || [];
       const providerRosters = summary.rosters?.length ? summary.rosters : (summary.boxscore?.players || []);
-      game.rosters = providerRosters.map(roster => { const players = roster.statistics ? roster.statistics.flatMap(group => group.athletes || []) : (roster.roster || roster.athletes || []); return { ...roster, roster: players, starters: players.filter(player => player.starter === true || player.isStarter === true), substitutes: players.filter(player => player.substitute === true || player.isSubstitute === true) }; });
+      game.rosters = providerRosters.map(roster => {
+        const groups = roster.statistics || roster.groups || [];
+        const grouped = groups.flatMap(group => group.athletes || group.players || group.entries || []);
+        const raw = roster.roster || roster.athletes || roster.entries || roster.players || [];
+        const unique = entries => [...new Map(entries.filter(Boolean).map((entry, index) => { const player = entry.athlete || entry; return [String(player.id || player.uid || player.displayName || player.fullName || index), entry]; })).values()];
+        const named = expression => groups.filter(group => expression.test(String(group.name || group.displayName || group.label || group.title || ''))).flatMap(group => group.athletes || group.players || group.entries || []);
+        const players = unique([...raw, ...grouped]);
+        const starters = unique([...named(/start|lineup|xi/i), ...players.filter(player => player.starter === true || player.isStarter === true || player.status?.type === 'starter')]);
+        let substitutes = unique([...named(/sub|bench|reserve/i), ...players.filter(player => player.substitute === true || player.isSubstitute === true || player.status?.type === 'substitute' || player.status?.type === 'bench')]);
+        // ESPN often sends a 20-player official roster with starters marked and
+        // unmarked reserve players. Once an XI is known, the remainder is bench.
+        if (!substitutes.length && starters.length) {
+          const starterIds = new Set(starters.map(entry => { const player = entry.athlete || entry; return String(player.id || player.uid || player.displayName || player.fullName); }));
+          substitutes = players.filter(entry => { const player = entry.athlete || entry; return !starterIds.has(String(player.id || player.uid || player.displayName || player.fullName)); });
+        }
+        return { ...roster, roster: players, starters, substitutes };
+      });
       game.events = plays.map(play => { const text = clean(play.text || play.shortText), clock = String(play.clock?.displayValue || ''), participants = play.participants || [], minute = Number((clock || text).match(/\d+/)?.[0]), type = /goal/i.test(text) ? 'goal' : /red card/i.test(text) ? 'red' : /yellow card/i.test(text) ? 'yellow' : /penalty/i.test(text) ? 'penalty' : /substitution|replaces/i.test(text) ? 'sub' : /injur/i.test(text) ? 'injury' : 'other'; return { type, minute: Number.isFinite(minute) ? minute : null, stoppage: /(?:45|90)\+\d+/.test(clock) || /(?:45|90)\+\d+/.test(text), text, teamId: String(play.team?.id || participants[0]?.team?.id || ''), players: participants.map(participant => clean(participant.athlete?.displayName || participant.displayName)).filter(Boolean), scorer: clean(participants[0]?.athlete?.displayName), assist: clean(play.assist?.athlete?.displayName), homeScore: Number.isFinite(Number(play.homeScore)) ? Number(play.homeScore) : null, awayScore: Number.isFinite(Number(play.awayScore)) ? Number(play.awayScore) : null, ownGoal: /own goal/i.test(text) }; });
       game._enriched = true;
     } catch (error) { console.warn('Could not enrich match', error); }
