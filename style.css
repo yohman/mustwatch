@@ -106,11 +106,7 @@
 
 /* A past lineup can be viewed spoiler-free until the Results tab is opened. */
 .list-game.past:not(.lineup-spoilers):not(:has(.tab-final-score)) .player-events,
-.list-game.past:not(.lineup-spoilers):not(:has(.tab-final-score)) .lineup-player.sub,
-.list-game.past:not(.lineup-spoilers):not(:has(.tab-final-score)) .lineups h4:has(+ .lineup-player.sub),
-.match-info:not(:has(.incident-list)) .player-events,
-.match-info:not(:has(.incident-list)) .lineup-player.sub,
-.match-info:not(:has(.incident-list)) .lineups h4:has(+ .lineup-player.sub){display:none!important}
+.match-info:not(:has(.incident-list)) .player-events{display:none!important}
 .lineup-spoiler-control{display:flex;align-items:center;gap:9px;margin:11px 0 3px;color:#969287;font:8px "DM Mono",monospace;letter-spacing:.13em;white-space:nowrap}.lineup-spoiler-control>span{flex:0 0 auto;white-space:nowrap}.lineup-spoiler-control button{display:inline-flex;flex:0 0 auto;align-items:center;gap:5px;border:1px solid rgba(243,239,229,.26);border-radius:999px;background:#1b1916;color:#969287;padding:3px 6px 3px 4px;font:8px "DM Mono",monospace;letter-spacing:.08em;cursor:pointer}.lineup-spoiler-control button i{width:12px;height:12px;border-radius:50%;background:#77736a;transition:transform .2s ease,background .2s ease}.lineup-spoiler-control button b{font:inherit}.lineup-spoiler-control button:hover{border-color:rgba(233,107,69,.72);color:#f3efe5}.lineup-spoilers .lineup-spoiler-control button{border-color:#e96b45;color:#e96b45}.lineup-spoilers .lineup-spoiler-control button i{background:#e96b45;transform:translateX(13px)}.lineup-spoilers .lineup-spoiler-control button b{transform:translateX(-11px)}
 
 /* Shared incident language: a team badge carries the event mark beneath it. */
