@@ -4,20 +4,20 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#11110f">
-  <title>Must Watch — Gameplot</title>
+  <title>Spoil Me Not — Gameplot</title>
   <link rel="preconnect" href="https://site.api.espn.com">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <main id="app">
     <header class="masthead">
-      <a class="wordmark" href="#" aria-label="Must Watch home">MUST <i>WATCH</i></a>
-      <p class="descriptor">Premier League, mapped by<br>what deserves your time.</p>
+      <a class="wordmark" href="#" aria-label="Spoil Me Not home"><img src="assets/spoil-me-not-logo.png" alt="Spoil Me Not"></a>
       <nav id="league-switcher" class="league-switcher" aria-label="Choose league"></nav>
       <nav id="team-ribbon" class="team-ribbon" aria-label="Filter teams"></nav>
       <div class="team-filter"><button id="team-toggle" class="team-toggle">TEAMS</button><div id="team-picker" class="team-picker" hidden><input id="team-search" type="search" placeholder="Filter teams" aria-label="Filter teams"><div id="team-results" class="team-results"></div></div></div>
-      <div class="masthead-actions"><div class="view-toggle" aria-label="View mode"><button data-view="map">MAP</button><button data-view="list" class="active">LIST</button></div><button id="now-button" class="now-button" aria-label="Go to now">NOW <span aria-hidden="true">↗</span></button></div>
+      <div class="masthead-actions"><button id="now-button" class="now-button" aria-label="Go to now"><span aria-hidden="true">↗</span><b>NOW</b></button></div>
     </header>
+    <div class="view-toggle" aria-label="View mode"><button data-view="map">MAP</button><button data-view="list" class="active">LIST</button></div>
     <button id="reveal-all" class="reveal-all">REVEAL ALL</button>
     <div id="team-hover-label" class="team-hover-label" hidden></div>
     <div id="team-preview" class="team-preview" hidden></div>
@@ -36,6 +36,19 @@
     </section>
     <section id="list-shell" class="list-shell" hidden aria-label="Chronological fixture list"></section>
   </main>
+  <section id="spoil-meter-modal" class="spoil-meter-modal" aria-labelledby="spoil-meter-title" role="dialog" aria-modal="true">
+    <div class="spoil-meter-dialog">
+      <h1 id="spoil-meter-title">Spoil Meter</h1>
+      <div class="spoil-meter-scale">
+        <div><svg class="eclipse eclipse-0" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/></svg><span>80–100</span><b>Must Watch</b></div>
+        <div><svg class="eclipse eclipse-1" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="23" cy="12" r="9"/></svg><span>65–79</span><b>Worth It</b></div>
+        <div><svg class="eclipse eclipse-2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="18" cy="12" r="9"/></svg><span>45–64</span><b>Your Call</b></div>
+        <div><svg class="eclipse eclipse-3" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="13" cy="12" r="9"/></svg><span>25–44</span><b>Save Your 90</b></div>
+        <div><svg class="eclipse eclipse-4" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="8" cy="12" r="9"/></svg><span>0–24</span><b>Don't Bother</b></div>
+      </div>
+      <button type="button" data-dismiss-spoil-meter>CONTINUE</button>
+    </div>
+  </section>
   <section id="match-info" class="match-info" hidden aria-live="polite"></section>
   <script src="https://unpkg.com/deck.gl@9.1.12/dist.min.js"></script>
   <script src="js/watchScore.js"></script>
@@ -43,5 +56,6 @@
   <script src="js/data.js"></script>
   <script src="js/gameplot.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/brand.js"></script>
 </body>
 </html>
