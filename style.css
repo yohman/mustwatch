@@ -267,3 +267,14 @@
   .team-ribbon{top:60px!important}
   .view-toggle{right:14px!important;bottom:14px!important}
 }
+
+/* Opening scale previews the actual meter language—light, edge, and number. */
+.spoil-meter-modal-logo{display:block;width:178px;height:38px;object-fit:contain;object-position:left center;margin:0 0 20px}
+.spoil-meter-scale>div.meter-sample{grid-template-columns:38px 56px 1fr!important;gap:10px!important;padding:9px 0!important}
+.meter-sample i{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;font:600 11px/1 "DM Mono",monospace;font-style:normal;letter-spacing:-.05em}
+.meter-sample.meter-90 i{background:#f3f3f1;color:#111;border:2px solid #fff}.meter-sample.meter-72 i{background:#c9c9c4;color:#171717;border:1.5px solid #efefea}.meter-sample.meter-55 i{background:#787874;color:#f3f3f1;border:1px solid #cececa}.meter-sample.meter-35 i{background:#353533;color:#e3e3df;border:1px dashed #92928e}.meter-sample.meter-12 i{background:#20201e;color:#a2a29d;border:1px dotted #686864}
+.meter-sample.meter-hidden i{background:#20201e;color:#f3f3f1;border:1px solid #b8b8b3;font:600 17px/1 Fraunces,Georgia,serif}.meter-sample.meter-hidden span{color:#777772}
+
+/* Give the new wordmark enough room to read as the primary masthead element. */
+.masthead{height:88px!important;padding-top:14px!important;padding-bottom:14px!important}.wordmark{width:280px!important;height:60px!important}.spoil-meter-modal-logo{width:220px!important;height:54px!important;margin-bottom:22px!important}
+@media(max-width:650px){.masthead{height:60px!important;padding-top:8px!important;padding-bottom:8px!important}.wordmark{width:100%!important;height:38px!important}.team-ribbon{top:60px!important}}

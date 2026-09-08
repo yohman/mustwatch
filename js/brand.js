@@ -66,12 +66,13 @@
   };
 
   const modal = document.getElementById('spoil-meter-modal');
+  const modalVersionKey = 'spoil-meter-introduced-v2';
   const dismiss = () => {
     modal?.setAttribute('hidden', '');
-    sessionStorage.setItem('spoil-meter-introduced', 'true');
+    sessionStorage.setItem(modalVersionKey, 'true');
   };
   modal?.querySelector('[data-dismiss-spoil-meter]')?.addEventListener('click', dismiss);
-  if (sessionStorage.getItem('spoil-meter-introduced') === 'true') dismiss();
+  if (sessionStorage.getItem(modalVersionKey) === 'true') dismiss();
 
   refresh();
   new MutationObserver(refresh).observe(document.body, {childList: true, subtree: true});
