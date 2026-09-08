@@ -278,3 +278,41 @@
 /* Give the new wordmark enough room to read as the primary masthead element. */
 .masthead{height:88px!important;padding-top:14px!important;padding-bottom:14px!important}.wordmark{width:280px!important;height:60px!important}.spoil-meter-modal-logo{width:220px!important;height:54px!important;margin-bottom:22px!important}
 @media(max-width:650px){.masthead{height:60px!important;padding-top:8px!important;padding-bottom:8px!important}.wordmark{width:100%!important;height:38px!important}.team-ribbon{top:60px!important}}
+
+/* Wide layouts use their own stable card and masthead geometry. */
+@media(min-width:651px){
+  .masthead{height:88px!important;overflow:visible!important}
+  .team-ribbon{top:88px!important;z-index:22!important}
+  .list-shell{padding-top:158px!important}
+
+  .list-game{display:grid!important;grid-template-columns:minmax(0,1fr) 154px!important;column-gap:22px!important;align-items:start!important}
+  .list-game .list-content{grid-column:1!important;grid-row:1!important;min-width:0!important;padding:3px 0 0 46px!important}
+  .list-game .list-meta{grid-column:2!important;grid-row:1!important;display:flex!important;align-items:flex-end!important;justify-self:end!important;width:154px!important;min-width:0!important;padding:1px 0 0!important;text-align:right!important}
+  .list-game .list-meta small,.list-game .list-meta b{width:100%!important;max-width:none!important;text-align:right!important}
+  .list-game .list-teams{display:grid!important;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)!important;align-items:center!important;gap:12px!important;width:100%!important}
+  .list-game .list-teams span{min-width:0!important;overflow:hidden!important;white-space:nowrap!important;text-overflow:ellipsis!important}
+  .list-game .list-teams span:last-child{justify-content:flex-end!important;text-align:right!important}
+  .list-game .list-teams i{justify-self:center!important;white-space:nowrap!important}
+  .list-game>.tab-final-score,.list-game>.box-score,.list-game>.incident-list{grid-column:1/-1!important}
+  .list-game:has(.lineups) .list-content,.list-game:has(.live-match-info) .list-content{grid-column:1/-1!important;grid-row:2!important;width:100%!important;padding-left:46px!important}
+}
+
+/* Desktop header controls share one visual baseline; expanded cards retain their header. */
+.meter-reveal-control>span{display:none!important}
+@media(min-width:651px){
+  .masthead{align-items:center!important}
+  .wordmark,.league-controls,.masthead-actions{align-self:center!important}
+  .masthead-actions{align-items:center!important}
+  .league-controls{height:auto!important}
+  .list-game:has(.lineups) .list-content,.list-game:has(.live-match-info) .list-content{grid-column:1!important;grid-row:1!important;width:auto!important;padding:3px 0 0 46px!important}
+  .list-game .list-content .lineups,.list-game .list-content .live-match-info{width:100%!important;min-width:0!important}
+}
+
+/* Undo the legacy display:contents rule that released card children into the grid. */
+@media(min-width:651px){
+  .list-game>.list-content{display:block!important;grid-column:1!important;grid-row:1!important;min-width:0!important;width:auto!important;padding:3px 0 0 46px!important}
+  .list-game>.list-content>.list-teams{display:grid!important;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)!important;align-items:center!important;gap:12px!important}
+  .list-game>.list-content>.match-tabs{display:flex!important;position:static!important;justify-content:flex-start!important;align-items:center!important;width:max-content!important;margin:14px 0 0!important;float:none!important}
+  .list-game>.list-content>.match-tabs button{position:static!important;float:none!important}
+  .list-game>.list-meta{grid-column:2!important;grid-row:1!important;justify-self:end!important;align-self:start!important}
+}
