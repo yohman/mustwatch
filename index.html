@@ -18,6 +18,10 @@
       <div class="team-filter"><button id="team-toggle" class="team-toggle">TEAMS</button><div id="team-picker" class="team-picker" hidden><input id="team-search" type="search" placeholder="Filter teams" aria-label="Filter teams"><div id="team-results" class="team-results"></div></div></div>
       <div class="masthead-actions"><button id="now-button" class="now-button" aria-label="Go to now"><span aria-hidden="true">↗</span><b>NOW</b></button></div>
     </header>
+    <section id="team-selector" class="team-selector" aria-label="Choose teams" hidden>
+      <div class="team-selector-head"><b>TEAMS</b><div><button type="button" data-select-all>ALL</button><button type="button" data-close-selector>DONE</button></div></div>
+      <div id="team-gallery" class="team-gallery"></div>
+    </section>
     <div class="view-toggle" aria-label="View mode"><button data-view="map">MAP</button><button data-view="list" class="active">LIST</button></div>
     <button id="reveal-all" class="reveal-all">REVEAL ALL</button>
     <div id="team-hover-label" class="team-hover-label" hidden></div>

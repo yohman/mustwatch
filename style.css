@@ -316,3 +316,80 @@
   .list-game>.list-content>.match-tabs button{position:static!important;float:none!important}
   .list-game>.list-meta{grid-column:2!important;grid-row:1!important;justify-self:end!important;align-self:start!important}
 }
+
+/* League-wide team selection: a compact status band opens into a deliberate badge gallery. */
+.team-ribbon{
+  position:fixed!important;top:88px!important;left:0!important;right:0!important;z-index:10010!important;
+  display:block!important;height:46px!important;padding:0 max(18px,calc((100vw - 1040px)/2))!important;
+  overflow:visible!important;white-space:normal!important;background:#1a1a19!important;
+  border-top:1px solid #383835!important;border-bottom:1px solid #4b4b47!important;box-shadow:0 8px 18px rgba(0,0,0,.17)!important;
+}
+.team-band-summary{display:flex!important;align-items:center!important;gap:13px!important;height:45px!important;min-width:0!important;color:#bdbdb8!important;font:9px "DM Mono",monospace!important;letter-spacing:.1em!important}
+.team-band-summary>span{flex:0 0 auto!important;color:#d8d8d4!important;white-space:nowrap!important}
+.team-band-chosen{display:flex!important;align-items:center!important;gap:8px!important;min-width:0!important;flex:1 1 auto!important;overflow-x:auto!important;overflow-y:hidden!important;scrollbar-width:none!important}
+.team-band-chosen::-webkit-scrollbar{display:none!important}
+.team-band-chosen span{display:inline-flex!important;align-items:center!important;gap:5px!important;flex:0 0 auto!important;color:#b7b7b2!important;white-space:nowrap!important}
+.team-band-chosen img{width:19px!important;height:19px!important;object-fit:contain!important}
+.team-band-summary [data-edit-teams]{flex:0 0 auto!important;margin-left:auto!important;padding:6px 9px!important;border:1px solid #686864!important;background:#222220!important;color:#ecece8!important;font:9px "DM Mono",monospace!important;letter-spacing:.1em!important;cursor:pointer!important}
+.team-band-summary [data-edit-teams]:hover{background:#343432!important;border-color:#efefeb!important}
+.team-selector[hidden]{display:none!important}
+.team-selector{position:fixed!important;z-index:10020!important;top:142px!important;left:50%!important;transform:translateX(-50%)!important;width:min(740px,calc(100vw - 32px))!important;max-height:min(620px,calc(100vh - 168px))!important;overflow:auto!important;padding:18px!important;background:#20201e!important;border:1px solid #777772!important;box-shadow:0 20px 52px rgba(0,0,0,.55)!important}
+.team-selector-head{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;margin-bottom:17px!important;color:#f1f1ed!important;font:10px "DM Mono",monospace!important;letter-spacing:.14em!important}
+.team-selector-head>div{display:flex!important;gap:6px!important}.team-selector-head button{border:1px solid #5f5f5a!important;background:#272725!important;color:#e7e7e2!important;padding:6px 9px!important;font:9px "DM Mono",monospace!important;letter-spacing:.1em!important;cursor:pointer!important}.team-selector-head button:hover{border-color:#efefeb!important;background:#353533!important}
+.team-gallery{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(88px,1fr))!important;gap:10px!important}
+.team-gallery-item{display:flex!important;min-width:0!important;min-height:78px!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:7px!important;padding:8px 5px!important;border:1px solid #3f3f3b!important;background:#191918!important;color:#989893!important;font:8px/1.15 "DM Mono",monospace!important;letter-spacing:.04em!important;text-align:center!important;cursor:pointer!important}
+.team-gallery-item img{width:34px!important;height:34px!important;object-fit:contain!important;filter:grayscale(1)!important;opacity:.5!important}.team-gallery-item.active{border-color:#ddddda!important;background:#2a2a28!important;color:#f2f2ee!important}.team-gallery-item.active img{opacity:1!important}.team-gallery-item:hover{border-color:#f2f2ee!important;background:#30302e!important}
+.list-shell{padding-top:158px!important}
+@media(max-width:650px){
+  .team-ribbon{top:60px!important;height:43px!important;padding:0 14px!important}
+  .team-band-summary{height:42px!important;gap:9px!important}.team-band-summary>span{font-size:8px!important}.team-band-chosen{gap:6px!important}.team-band-chosen span{font-size:8px!important}.team-band-chosen img{width:17px!important;height:17px!important}
+  .team-band-summary [data-edit-teams]{padding:5px 7px!important;font-size:8px!important}
+  .team-selector{top:111px!important;width:calc(100vw - 20px)!important;max-height:calc(100vh - 128px)!important;padding:14px!important}
+  .team-gallery{grid-template-columns:repeat(auto-fill,minmax(67px,1fr))!important;gap:7px!important}.team-gallery-item{min-height:66px!important;padding:6px 3px!important;font-size:7px!important}.team-gallery-item img{width:27px!important;height:27px!important}
+  .list-shell{padding-top:134px!important}
+}
+
+/* Baseball preview context stays factual and compact: probable pitchers appear before an official lineup. */
+.mlb-probables{display:block!important;margin:8px 0 1px!important;color:#bcbcb7!important;font:9px/1.45 "DM Mono",monospace!important;letter-spacing:.045em!important}.mlb-probables b{color:#eeeeea!important;font-weight:500!important}.baseball-game .list-content>small{display:none!important}
+.incident.run{background:rgba(243,243,241,.055)!important;box-shadow:inset 2px 0 #d6d6d2!important}.event-badge.run{display:grid!important;place-items:center!important;width:23px!important;height:23px!important}.event-badge.run img{width:21px!important;height:21px!important;object-fit:contain!important}.incident.run .event-mark{color:#deded9!important;font:9px "DM Mono",monospace!important;white-space:nowrap!important}
+@media(max-width:650px){
+  .masthead{grid-template-columns:82px 84px 48px 48px!important;column-gap:4px!important;padding-left:10px!important;padding-right:10px!important}
+  .league-controls .league-switcher{width:84px!important;gap:4px!important}
+  .league-controls .league-switcher button{font-size:7px!important;white-space:nowrap!important}
+}
+
+/* Card headers share one resilient layout across football and baseball. */
+.list-game .list-teams{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;align-items:start!important;gap:clamp(12px,3vw,34px)!important;width:100%!important}
+.list-game .list-teams>span{display:grid!important;grid-template-columns:30px minmax(0,1fr)!important;grid-template-rows:minmax(0,auto) auto!important;align-items:start!important;align-content:start!important;column-gap:8px!important;min-width:0!important;overflow:visible!important;text-align:left!important;white-space:normal!important}
+.list-game .list-teams>span:last-child{justify-self:stretch!important;justify-content:start!important;text-align:left!important}
+.list-game .list-teams>span>img{grid-column:1!important;grid-row:1 / span 2!important;width:29px!important;height:29px!important;margin-top:1px!important;object-fit:contain!important}
+.list-game .list-teams .team-name{display:-webkit-box!important;grid-column:2!important;grid-row:1!important;min-width:0!important;max-width:100%!important;overflow:hidden!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:2!important;text-overflow:ellipsis!important;color:#f1f1ee!important;font:600 clamp(14px,1.75vw,22px)/1.02 Fraunces,Georgia,serif!important;letter-spacing:-.035em!important;word-break:normal!important;overflow-wrap:anywhere!important}
+.list-game .list-teams .team-table-context{display:flex!important;grid-column:2!important;grid-row:2!important;flex-direction:column!important;gap:2px!important;min-width:0!important;margin:5px 0 0!important;color:#a4a49f!important;font:8px/1.15 "DM Mono",monospace!important;letter-spacing:.035em!important;white-space:nowrap!important}
+.list-game .list-teams .team-table-context b,.list-game .list-teams .team-table-context i{overflow:hidden!important;text-overflow:ellipsis!important;font:inherit!important;font-style:normal!important}
+.list-game .list-meta{min-width:0!important}.list-game .list-meta .match-datetime{display:block!important;width:100%!important;max-width:100%!important;white-space:normal!important;line-height:1.35!important}.list-game .list-meta .match-datetime span,.list-game .list-meta .match-datetime time{display:block!important;white-space:nowrap!important}.list-game .list-meta .match-datetime time{font:inherit!important;color:inherit!important}
+
+/* Live is legible at a glance without duplicating the status in the time block. */
+.list-game>strong.match-stamp.live{display:grid!important;place-items:center!important;background:#2a1c17!important;color:#f7eee9!important;border:1px solid #e96b45!important;box-shadow:0 0 0 3px rgba(233,107,69,.13),0 0 17px rgba(233,107,69,.23)!important;font:600 10px/1 "DM Mono",monospace!important;letter-spacing:.08em!important}
+.list-game>strong.match-stamp.live::before{content:""!important;position:absolute!important;inset:-5px!important;top:auto!important;right:auto!important;width:auto!important;height:auto!important;border:1px solid rgba(233,107,69,.7)!important;border-radius:50%!important;background:transparent!important;box-shadow:0 0 13px rgba(233,107,69,.34)!important;animation:live-ring-pulse 1.3s ease-in-out infinite!important}
+.list-game>strong.match-stamp.live .live-stamp-label{position:relative!important;z-index:1!important}
+@keyframes live-ring-pulse{0%,100%{opacity:.85;transform:scale(1)}50%{opacity:.32;transform:scale(1.14)}}
+
+/* Pitching context belongs below the matchup only while it is genuinely predictive. */
+.mlb-probables{display:grid!important;grid-template-columns:auto minmax(0,1fr)!important;align-items:baseline!important;gap:8px!important;width:100%!important;max-width:100%!important;margin:10px 0 2px!important;padding:7px 0 0!important;border-top:1px solid rgba(243,243,241,.1)!important;color:#bcbcb7!important;font:9px/1.35 "DM Mono",monospace!important;letter-spacing:.04em!important}
+.mlb-probables>span{color:#969691!important;white-space:nowrap!important}.mlb-probables>div{display:flex!important;flex-wrap:wrap!important;align-items:baseline!important;gap:4px 7px!important;min-width:0!important}.mlb-probables b{color:#eeeeea!important;font:500 10px/1.35 Inter,Arial,sans-serif!important;white-space:nowrap!important}.mlb-probables i{color:#81817c!important;font-style:normal!important}.baseball-game.past .mlb-probables,.baseball-game.live .mlb-probables{display:none!important}
+
+@media(max-width:650px){
+  .list-game .list-teams{gap:10px!important}
+  .list-game .list-teams>span{grid-template-columns:24px minmax(0,1fr)!important;column-gap:5px!important}
+  .list-game .list-teams>span>img{width:23px!important;height:23px!important}
+  .list-game .list-teams .team-name{font-size:clamp(13px,4vw,17px)!important;line-height:1.04!important}
+  .list-game .list-teams .team-table-context{margin-top:3px!important;font-size:7px!important}
+  .list-game .list-meta{align-self:start!important;padding-top:2px!important}
+  .list-game .list-meta .match-datetime{font-size:8px!important;text-align:right!important}
+  .list-game>strong.match-stamp.live{width:43px!important;height:43px!important;font-size:8px!important}
+  .mlb-probables{grid-template-columns:1fr!important;gap:4px!important;margin-top:8px!important}
+  .mlb-probables>div{gap:4px 6px!important}
+}
+@media(max-width:900px){
+  .list-game .mlb-probables{grid-column:1 / -1!important;grid-row:auto!important;width:100%!important;min-width:0!important;margin-left:0!important;margin-right:0!important}
+}
