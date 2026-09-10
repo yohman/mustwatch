@@ -2,6 +2,7 @@ window.EPLData = (() => {
   const LEAGUES = {
     epl: { id: 'epl', sport: 'soccer', slug: 'eng.1', name: 'Premier League', shortName: 'PREMIER LEAGUE', logo: 'https://a.espncdn.com/i/leaguelogos/soccer/500/eng.1.png' },
     laliga: { id: 'laliga', sport: 'soccer', slug: 'esp.1', name: 'La Liga', shortName: 'LA LIGA', logo: 'https://a.espncdn.com/i/leaguelogos/soccer/500/esp.1.png' },
+    ucl: { id: 'ucl', sport: 'soccer', slug: 'uefa.champions', name: 'UEFA Champions League', shortName: 'CHAMPIONS LEAGUE', logo: 'https://a.espncdn.com/i/leaguelogos/soccer/500/uefa.champions.png' },
     mlb: { id: 'mlb', sport: 'baseball', slug: 'mlb', name: 'Major League Baseball', shortName: 'MLB', logo: 'https://a.espncdn.com/i/leaguelogos/mlb/500/mlb.png', pastCap: 54, futureCap: 110 }
   };
   const MLB_BASE = 'https://statsapi.mlb.com/api/v1', MLB_LIVE = 'https://statsapi.mlb.com/api/v1.1';
