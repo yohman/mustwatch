@@ -66,12 +66,18 @@
   };
 
   const modal = document.getElementById('spoil-meter-modal');
-  const modalVersionKey = 'spoil-meter-introduced-v2';
+  const modalVersionKey = 'league-choice-introduced-v1';
   const dismiss = () => {
     modal?.setAttribute('hidden', '');
     sessionStorage.setItem(modalVersionKey, 'true');
   };
   modal?.querySelector('[data-dismiss-spoil-meter]')?.addEventListener('click', dismiss);
+  modal?.addEventListener('click', event => {
+    const choice = event.target.closest('[data-choose-league]');
+    if (!choice) return;
+    window.dispatchEvent(new CustomEvent('spoil-me-not:choose-league', { detail: { id: choice.dataset.chooseLeague } }));
+    dismiss();
+  });
   if (sessionStorage.getItem(modalVersionKey) === 'true') dismiss();
 
   refresh();

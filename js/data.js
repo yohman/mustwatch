@@ -3,32 +3,37 @@ window.EPLData = (() => {
     epl: { id: 'epl', sport: 'soccer', slug: 'eng.1', name: 'Premier League', shortName: 'PREMIER LEAGUE', logo: 'https://a.espncdn.com/i/leaguelogos/soccer/500/eng.1.png' },
     laliga: { id: 'laliga', sport: 'soccer', slug: 'esp.1', name: 'La Liga', shortName: 'LA LIGA', logo: 'https://a.espncdn.com/i/leaguelogos/soccer/500/esp.1.png' },
     ucl: { id: 'ucl', sport: 'soccer', slug: 'uefa.champions', name: 'UEFA Champions League', shortName: 'CHAMPIONS LEAGUE', logo: 'https://a.espncdn.com/i/leaguelogos/soccer/500/uefa.champions.png' },
-    mlb: { id: 'mlb', sport: 'baseball', slug: 'mlb', name: 'Major League Baseball', shortName: 'MLB', logo: 'https://a.espncdn.com/i/leaguelogos/mlb/500/mlb.png', pastCap: 54, futureCap: 110 }
+    mlb: { id: 'mlb', sport: 'baseball', slug: 'mlb', name: 'Major League Baseball', shortName: 'MLB', logo: 'https://a.espncdn.com/i/leaguelogos/mlb/500/mlb.png', pastCap: 54, futureCap: 110 },
+    nfl: { id: 'nfl', sport: 'football', slug: 'nfl', name: 'National Football League', shortName: 'NFL', logo: 'https://a.espncdn.com/i/leaguelogos/nfl/500/nfl.png' }
   };
   const MLB_BASE = 'https://statsapi.mlb.com/api/v1', MLB_LIVE = 'https://statsapi.mlb.com/api/v1.1';
   let activeLeague = 'epl';
   const clean = value => String(value || '').replace(/\s+/g, ' ').trim();
   const color = team => team?.color ? `#${team.color}` : '#77736a';
+  const espnBase = league => `https://site.api.espn.com/apis/site/v2/sports/${league.sport}/${league.slug}`;
+  const espnStandings = league => `https://site.api.espn.com/apis/v2/sports/${league.sport}/${league.slug}/standings`;
   const soccerBase = slug => `https://site.api.espn.com/apis/site/v2/sports/soccer/${slug}`;
   const formatSoccerDate = date => date.toISOString().slice(0, 10).replaceAll('-', '');
   const formatMlbDate = date => date.toISOString().slice(0, 10);
   const soccerDateRange = () => { const now = new Date(), start = new Date(now), end = new Date(now); start.setDate(now.getDate() - 50); end.setDate(now.getDate() + 80); return `${formatSoccerDate(start)}-${formatSoccerDate(end)}`; };
   const mlbWindow = () => { const now = new Date(), start = new Date(now), end = new Date(now); start.setDate(now.getDate() - 3); end.setDate(now.getDate() + 7); return { startDate: formatMlbDate(start), endDate: formatMlbDate(end) }; };
   const isLiveStatus = status => { const type = status?.type || status || {}, name = String(type.name || status?.name || ''); return type.state === 'in' || status?.state === 'in' || /^STATUS_(?:FIRST|SECOND|HALF|EXTRA|IN_PROGRESS)/.test(name); };
-  const mlbLogo = id => id ? `https://www.mlbstatic.com/team-logos/${id}.svg` : '';
+  // deck.gl's IconLayer cannot rasterize MLB's dimensionless SVG marks reliably.
+  // ESPN's scoreboard PNGs preserve the same club identity for both the map and list.
+  const mlbLogo = team => team?.abbreviation ? `https://a.espncdn.com/i/teamlogos/mlb/500/${String(team.abbreviation).toLowerCase()}.png` : '';
 
   function normalize(event, league = LEAGUES[activeLeague]) {
     const competition = event.competitions?.[0], teams = competition?.competitors || [], home = teams.find(team => team.homeAway === 'home'), away = teams.find(team => team.homeAway === 'away');
     if (!home || !away) return null;
     const completed = event.status?.type?.completed === true, live = isLiveStatus(event.status), scored = completed || live;
-    return { id: event.id, sport: 'soccer', leagueId: league.id, league: league.name, leagueLogo: league.logo, time: new Date(event.date), home: clean(home.team.displayName), away: clean(away.team.displayName), homeId: String(home.team.id || ''), awayId: String(away.team.id || ''), homeAbbr: home.team.abbreviation, awayAbbr: away.team.abbreviation, homeLogo: home.team.logo || home.team.logos?.[0]?.href || '', awayLogo: away.team.logo || away.team.logos?.[0]?.href || '', homeColor: color(home.team), awayColor: color(away.team), homeScore: scored ? Number(home.score) : null, awayScore: scored ? Number(away.score) : null, completed, live, venue: clean(competition.venue?.fullName), status: event.status?.type?.detail || '', events: [], raw: event };
+    return { id: event.id, sport: league.sport, leagueId: league.id, league: league.name, leagueLogo: league.logo, time: new Date(event.date), home: clean(home.team.displayName), away: clean(away.team.displayName), homeId: String(home.team.id || ''), awayId: String(away.team.id || ''), homeAbbr: home.team.abbreviation, awayAbbr: away.team.abbreviation, homeLogo: home.team.logo || home.team.logos?.[0]?.href || '', awayLogo: away.team.logo || away.team.logos?.[0]?.href || '', homeColor: color(home.team), awayColor: color(away.team), homeScore: scored ? Number(home.score) : null, awayScore: scored ? Number(away.score) : null, completed, live, venue: clean(competition.venue?.fullName), status: event.status?.type?.detail || '', events: [], raw: event };
   }
 
   function normalizeMlb(game, league = LEAGUES.mlb) {
     const home = game.teams?.home, away = game.teams?.away, status = game.status || {};
     if (!home?.team || !away?.team) return null;
     const completed = status.abstractGameState === 'Final', live = status.abstractGameState === 'Live', scored = completed || live;
-    return { id: String(game.gamePk), sport: 'baseball', leagueId: league.id, league: league.name, leagueLogo: league.logo, time: new Date(game.gameDate), home: clean(home.team.name), away: clean(away.team.name), homeId: String(home.team.id), awayId: String(away.team.id), homeAbbr: home.team.abbreviation, awayAbbr: away.team.abbreviation, homeLogo: mlbLogo(home.team.id), awayLogo: mlbLogo(away.team.id), homeColor: '#77736a', awayColor: '#b5b5b0', homeScore: scored ? Number(home.score) : null, awayScore: scored ? Number(away.score) : null, completed, live, venue: clean(game.venue?.name), status: status.detailedState || status.abstractGameState || '', probableHomePitcher: home.probablePitcher || null, probableAwayPitcher: away.probablePitcher || null, gameNumber: game.gameNumber, doubleHeader: game.doubleHeader, events: [], raw: game };
+    return { id: String(game.gamePk), sport: 'baseball', leagueId: league.id, league: league.name, leagueLogo: league.logo, time: new Date(game.gameDate), home: clean(home.team.name), away: clean(away.team.name), homeId: String(home.team.id), awayId: String(away.team.id), homeAbbr: home.team.abbreviation, awayAbbr: away.team.abbreviation, homeLogo: mlbLogo(home.team), awayLogo: mlbLogo(away.team), homeColor: '#77736a', awayColor: '#b5b5b0', homeScore: scored ? Number(home.score) : null, awayScore: scored ? Number(away.score) : null, completed, live, venue: clean(game.venue?.name), status: status.detailedState || status.abstractGameState || '', probableHomePitcher: home.probablePitcher || null, probableAwayPitcher: away.probablePitcher || null, gameNumber: game.gameNumber, doubleHeader: game.doubleHeader, events: [], raw: game };
   }
 
   const addSoccerContext = (games, ranks) => games.forEach(game => {
@@ -48,11 +53,11 @@ window.EPLData = (() => {
 
   async function loadSoccer(id) {
     const league = LEAGUES[id];
-    const [fixtures, standings] = await Promise.all([fetch(`${soccerBase(league.slug)}/scoreboard?limit=1000&dates=${soccerDateRange()}`), fetch(`https://site.api.espn.com/apis/v2/sports/soccer/${league.slug}/standings`).catch(() => null)]);
+    const [fixtures, standings] = await Promise.all([fetch(`${espnBase(league)}/scoreboard?limit=1000&dates=${soccerDateRange()}`), fetch(espnStandings(league)).catch(() => null)]);
     if (!fixtures.ok) throw Error(`${league.name} fixtures are unavailable (${fixtures.status}).`);
     const games = ((await fixtures.json()).events || []).map(event => normalize(event, league)).filter(Boolean);
     if (!games.length) throw Error(`The ${league.name} feed returned no fixtures for this period.`);
-    const ranks = {}; try { const table = standings?.ok ? await standings.json() : null; (table?.children || []).flatMap(group => group.standings?.entries || []).forEach(entry => { const rank = entry.stats?.find(stat => stat.name === 'rank')?.value; if (Number.isFinite(rank)) ranks[clean(entry.team?.displayName)] = rank; }); } catch (_) {}
+    const ranks = {}; try { const table = standings?.ok ? await standings.json() : null; (table?.children || []).flatMap(group => group.standings?.entries || []).forEach(entry => { const stat = name => entry.stats?.find(item => item.name === name)?.value, rank = stat('rank') ?? stat('playoffSeed') ?? stat('divisionRank'); if (Number.isFinite(rank)) ranks[clean(entry.team?.displayName)] = rank; }); } catch (_) {}
     addSoccerContext(games, ranks); return games;
   }
 
@@ -73,7 +78,35 @@ window.EPLData = (() => {
     const table = {}; try { const standings = standingsResponse?.ok ? await standingsResponse.json() : null; (standings?.records || []).flatMap(record => record.teamRecords || []).forEach(entry => { table[String(entry.team?.id)] = { rank: Number(entry.divisionRank), wins: Number(entry.wins), losses: Number(entry.losses), gamesBack: entry.gamesBack }; }); } catch (_) {}
     addMlbContext(limited, table); return limited;
   }
-  async function load(id = activeLeague) { const league = LEAGUES[id]; if (!league) throw Error('Unknown league.'); activeLeague = id; return league.sport === 'baseball' ? loadMlb() : loadSoccer(id); }
+  const loadOne = id => LEAGUES[id].sport === 'baseball' ? loadMlb() : loadSoccer(id);
+  const compactAllLeagueWindow = (games, league) => {
+    const now = Date.now(), pastLimit = league.sport === 'baseball' ? 30 : 24, futureLimit = league.sport === 'baseball' ? 72 : 44;
+    const past = games.filter(game => game.completed && game.time >= now - 3 * 864e5).sort((a, b) => b.time - a.time).slice(0, pastLimit).reverse();
+    const live = games.filter(game => game.live && !game.completed);
+    const future = games.filter(game => !game.completed && !game.live && game.time >= now && game.time <= now + 7 * 864e5).sort((a, b) => a.time - b.time).slice(0, futureLimit);
+    return [...past, ...live, ...future];
+  };
+  async function load(id = activeLeague) {
+    if (id === 'all') {
+      activeLeague = 'all';
+      const results = await Promise.allSettled(Object.keys(LEAGUES).map(async leagueId => compactAllLeagueWindow(await loadOne(leagueId), LEAGUES[leagueId])));
+      const combined = results.filter(result => result.status === 'fulfilled').flatMap(result => result.value).sort((a, b) => a.time - b.time);
+      if (!combined.length) throw Error('No league feeds are available right now.');
+      return combined;
+    }
+    const league = LEAGUES[id]; if (!league) throw Error('Unknown league.'); activeLeague = id; return loadOne(id);
+  }
+
+  function nflScore(game, summary) {
+    const plays = (summary.scoringPlays || summary.plays || []).filter(Boolean), home = Number(game.homeScore || 0), away = Number(game.awayScore || 0), margin = Math.abs(home - away), total = home + away, overtime = /overtime|ot/i.test(String(game.status || ''));
+    let leader = 0, leadChanges = 0, ties = 0;
+    plays.forEach(play => { const next = Math.sign(Number(play.homeScore || 0) - Number(play.awayScore || 0)); if (next === 0 && leader) ties++; if (next && leader && next !== leader) leadChanges++; if (next) leader = next; });
+    const drama = Math.min(100, (margin <= 3 ? 42 : margin <= 8 ? 25 : 6) + leadChanges * 18 + ties * 7 + (overtime ? 20 : 0));
+    const action = Math.min(100, total * 1.45 + plays.length * 7);
+    const exceptional = Math.min(100, (overtime ? 32 : 0) + (total >= 60 ? 32 : total >= 48 ? 17 : 0) + leadChanges * 9);
+    const surpriseContext = Number.isFinite(game.contextScore) ? game.contextScore : 40;
+    return { watchScore: Math.round(drama * .4 + action * .25 + exceptional * .2 + surpriseContext * .15), drama: Math.round(drama), action: Math.round(action), exceptional: Math.round(exceptional), surpriseContext: Math.round(surpriseContext), reasons: [margin <= 3 && 'One-score finish', overtime && 'Overtime', leadChanges && `${leadChanges} lead change${leadChanges === 1 ? '' : 's'}`, total >= 60 && 'High-scoring game'].filter(Boolean), nfl: true };
+  }
 
   function mlbScore(game, feed) {
     const linescore = feed.liveData?.linescore || {}, teams = linescore.teams || {}, away = teams.away || {}, home = teams.home || {}, plays = (feed.liveData?.plays?.allPlays || []).filter(play => play.about?.isScoringPlay), finalHome = Number(home.runs ?? game.homeScore ?? 0), finalAway = Number(away.runs ?? game.awayScore ?? 0), finalMargin = Math.abs(finalHome - finalAway), extra = (linescore.innings || []).length > 9;
@@ -114,8 +147,8 @@ window.EPLData = (() => {
   async function enrichSoccer(game, { refresh = false } = {}) {
     if (game._enriched && !refresh) return game;
     try {
-      const league = LEAGUES[game.leagueId || activeLeague], response = await fetch(`${soccerBase(league.slug)}/summary?event=${game.id}`); if (!response.ok) return game;
-      const summary = await response.json(), plays = summary.keyEvents || summary.plays || [], competition = summary.header?.competitions?.[0], status = competition?.status || summary.header?.status;
+      const league = LEAGUES[game.leagueId || activeLeague], response = await fetch(`${espnBase(league)}/summary?event=${game.id}`); if (!response.ok) return game;
+      const summary = await response.json(), plays = summary.scoringPlays || summary.keyEvents || summary.plays || [], competition = summary.header?.competitions?.[0], status = competition?.status || summary.header?.status;
       if (status) { game.status = status.type?.detail || status.displayClock || game.status; game.completed = status.type?.completed === true; game.live = isLiveStatus(status); }
       (competition?.competitors || []).forEach(team => { if (team.homeAway === 'home' && team.score != null) game.homeScore = Number(team.score); if (team.homeAway === 'away' && team.score != null) game.awayScore = Number(team.score); });
       game.summary = summary; game.injuries = summary.injuries || [];
@@ -129,7 +162,8 @@ window.EPLData = (() => {
         if (!substitutes.length && starters.length) { const starterIds = new Set(starters.map(entry => { const player = entry.athlete || entry; return String(player.id || player.uid || player.displayName || player.fullName); })); substitutes = players.filter(entry => { const player = entry.athlete || entry; return !starterIds.has(String(player.id || player.uid || player.displayName || player.fullName)); }); }
         return { ...roster, roster: players, starters, substitutes };
       });
-      game.events = plays.map(play => { const text = clean(play.text || play.shortText), clock = String(play.clock?.displayValue || ''), participants = play.participants || [], minute = Number((clock || text).match(/\d+/)?.[0]), type = /goal/i.test(text) ? 'goal' : /red card/i.test(text) ? 'red' : /yellow card/i.test(text) ? 'yellow' : /penalty/i.test(text) ? 'penalty' : /substitution|replaces/i.test(text) ? 'sub' : /injur/i.test(text) ? 'injury' : 'other'; return { type, minute: Number.isFinite(minute) ? minute : null, stoppage: /(?:45|90)\+\d+/.test(clock) || /(?:45|90)\+\d+/.test(text), text, teamId: String(play.team?.id || participants[0]?.team?.id || ''), players: participants.map(participant => clean(participant.athlete?.displayName || participant.displayName)).filter(Boolean), scorer: clean(participants[0]?.athlete?.displayName), assist: clean(play.assist?.athlete?.displayName), homeScore: Number.isFinite(Number(play.homeScore)) ? Number(play.homeScore) : null, awayScore: Number.isFinite(Number(play.awayScore)) ? Number(play.awayScore) : null, ownGoal: /own goal/i.test(text) }; });
+      game.events = plays.map(play => { const text = clean(play.text || play.shortText || play.description), clock = String(play.clock?.displayValue || ''), participants = play.participants || [], minute = Number((clock || text).match(/\d+/)?.[0]), type = game.sport === 'football' ? 'goal' : /goal/i.test(text) ? 'goal' : /red card/i.test(text) ? 'red' : /yellow card/i.test(text) ? 'yellow' : /penalty/i.test(text) ? 'penalty' : /substitution|replaces/i.test(text) ? 'sub' : /injur/i.test(text) ? 'injury' : 'other'; return { type, minute: Number.isFinite(minute) ? minute : null, period: play.period?.number || play.period, stoppage: /(?:45|90)\+\d+/.test(clock) || /(?:45|90)\+\d+/.test(text), text, teamId: String(play.team?.id || participants[0]?.team?.id || ''), players: participants.map(participant => clean(participant.athlete?.displayName || participant.displayName)).filter(Boolean), scorer: clean(participants[0]?.athlete?.displayName), assist: clean(play.assist?.athlete?.displayName), homeScore: Number.isFinite(Number(play.homeScore)) ? Number(play.homeScore) : null, awayScore: Number.isFinite(Number(play.awayScore)) ? Number(play.awayScore) : null, ownGoal: /own goal/i.test(text) }; });
+      if (game.sport === 'football' && game.completed) game.scoreResult = nflScore(game, summary);
       game._enriched = true;
     } catch (error) { console.warn('Could not enrich match', error); }
     return game;
@@ -141,11 +175,11 @@ window.EPLData = (() => {
       const league = LEAGUES[id]; if (!league) return;
       try {
         if (league.sport === 'baseball') { const fresh = new Map((await loadMlb()).map(game => [String(game.id), game])); games.filter(game => game.leagueId === id).forEach(game => { const update = fresh.get(String(game.id)); if (update) Object.assign(game, { live: update.live, completed: update.completed, status: update.status, homeScore: update.homeScore, awayScore: update.awayScore, probableHomePitcher: update.probableHomePitcher, probableAwayPitcher: update.probableAwayPitcher }); }); return; }
-        const response = await fetch(`${soccerBase(league.slug)}/scoreboard?limit=1000&dates=${soccerDateRange()}`); if (!response.ok) return;
+        const response = await fetch(`${espnBase(league)}/scoreboard?limit=1000&dates=${soccerDateRange()}`); if (!response.ok) return;
         const fresh = new Map(((await response.json()).events || []).map(event => normalize(event, league)).filter(Boolean).map(game => [String(game.id), game])); games.filter(game => game.leagueId === id).forEach(game => { const update = fresh.get(String(game.id)); if (update) Object.assign(game, { live: update.live, completed: update.completed, status: update.status, homeScore: update.homeScore, awayScore: update.awayScore }); });
       } catch (_) {}
     })); return games;
   }
   const enrich = (game, options) => game.sport === 'baseball' ? enrichMlb(game, options) : enrichSoccer(game, options);
-  return { leagues: LEAGUES, get activeLeague() { return activeLeague; }, setLeague: id => { if (!LEAGUES[id]) throw Error('Unknown league.'); activeLeague = id; }, load, enrich, refresh, normalize, normalizeMlb };
+  return { leagues: LEAGUES, get activeLeague() { return activeLeague; }, setLeague: id => { if (id !== 'all' && !LEAGUES[id]) throw Error('Unknown league.'); activeLeague = id; }, load, enrich, refresh, normalize, normalizeMlb };
 })();

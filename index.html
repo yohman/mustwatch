@@ -45,18 +45,18 @@
     </section>
     <section id="list-shell" class="list-shell" hidden aria-label="Chronological fixture list"></section>
   </main>
-  <section id="spoil-meter-modal" class="spoil-meter-modal" aria-label="Spoil Meter guide" role="dialog" aria-modal="true">
-    <div class="spoil-meter-dialog">
+  <section id="spoil-meter-modal" class="spoil-meter-modal" aria-label="Choose a league" role="dialog" aria-modal="true">
+    <div class="spoil-meter-dialog league-choice-dialog">
       <img class="spoil-meter-modal-logo" src="assets/spoil-me-not-logo.png" alt="Spoil Me Not">
-      <div class="spoil-meter-scale">
-        <div class="meter-sample meter-90"><i>90</i><span>80–100</span><b>Must Watch</b></div>
-        <div class="meter-sample meter-72"><i>72</i><span>65–79</span><b>Worth It</b></div>
-        <div class="meter-sample meter-55"><i>55</i><span>45–64</span><b>Your Call</b></div>
-        <div class="meter-sample meter-35"><i>35</i><span>25–44</span><b>Save Your 90</b></div>
-        <div class="meter-sample meter-12"><i>12</i><span>0–24</span><b>Don't Bother</b></div>
-        <div class="meter-sample meter-hidden"><i>?</i><span>UNREVEALED</span><b>Click to find out</b></div>
+      <h1>Choose a league</h1>
+      <div class="league-choice-grid">
+        <button type="button" data-choose-league="all"><b>ALL</b><span>All Leagues</span></button>
+        <button type="button" data-choose-league="epl"><b>EPL</b><span>Premier League</span></button>
+        <button type="button" data-choose-league="laliga"><b>LA LIGA</b><span>La Liga</span></button>
+        <button type="button" data-choose-league="ucl"><b>UCL</b><span>Champions League</span></button>
+        <button type="button" data-choose-league="mlb"><b>MLB</b><span>Major League Baseball</span></button>
+        <button type="button" data-choose-league="nfl"><b>NFL</b><span>National Football League</span></button>
       </div>
-      <button type="button" data-dismiss-spoil-meter>CONTINUE</button>
     </div>
   </section>
   <section id="match-info" class="match-info" hidden aria-live="polite"></section>
