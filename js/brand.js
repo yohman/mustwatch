@@ -22,7 +22,8 @@
         stamp.style.setProperty('--meter-tone', `hsl(0 0% ${lightness}%)`);
         stamp.style.setProperty('--meter-ink', lightness > 58 ? '#111' : '#f3f3f1');
         if (!stamp.querySelector('.spoil-meter-value')) {
-          stamp.innerHTML = `<button type="button" class="spoil-meter-value" data-watch-toggle aria-label="Toggle Spoil Meter">${value}</button>`;
+          const leagueMark = stamp.querySelector('.stamp-league')?.outerHTML || '';
+          stamp.innerHTML = `<button type="button" class="spoil-meter-value" data-watch-toggle aria-label="Toggle Spoil Meter">${value}</button>${leagueMark}`;
         }
       } else if (stamp.textContent.trim() === '?') {
         stamp.classList.add('spoil-meter-badge', 'spoil-meter-trigger');
@@ -31,7 +32,8 @@
         stamp.style.removeProperty('--meter-tone');
         stamp.style.removeProperty('--meter-ink');
         if (!stamp.querySelector('.spoil-meter-value')) {
-          stamp.innerHTML = '<button type="button" class="spoil-meter-value" data-watch-toggle aria-label="Toggle Spoil Meter">?</button>';
+          const leagueMark = stamp.querySelector('.stamp-league')?.outerHTML || '';
+          stamp.innerHTML = `<button type="button" class="spoil-meter-value" data-watch-toggle aria-label="Toggle Spoil Meter">?</button>${leagueMark}`;
         }
       }
     });

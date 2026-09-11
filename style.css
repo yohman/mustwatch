@@ -427,3 +427,189 @@
   .team-band-summary{gap:6px!important}.team-band-summary>.league-band-current{height:30px!important;padding:3px 6px!important;gap:5px!important}.league-band-current img{width:18px!important;height:18px!important}.league-band-current b{font-size:8px!important}.league-band-current i{display:none!important}.team-band-summary>.league-band-divider{height:21px!important}.team-selection-summary{gap:7px!important}.team-band-count{font-size:8px!important}
   .league-selector{top:111px!important;width:calc(100vw - 20px)!important;padding:14px!important}.league-gallery{gap:7px!important}.league-gallery-item{grid-template-columns:25px minmax(0,1fr)!important;min-height:55px!important;padding:8px!important}.league-gallery-item img{width:24px!important;height:24px!important}.league-gallery-item span{font-size:9px!important}.league-gallery-item small{font-size:7px!important}
 }
+
+/* League marks are compact wayfinding, not a second color system. */
+.league-band-logo{width:21px!important;height:21px!important;object-fit:contain!important;filter:grayscale(1)!important;opacity:.9!important}
+.league-gallery-item:has(.league-choice-badge){display:grid!important;grid-template-columns:29px minmax(0,1fr)!important;grid-template-rows:auto auto!important;align-items:center!important;column-gap:8px!important}
+.league-gallery-item .league-choice-badge{display:block!important;grid-column:1!important;grid-row:1 / span 2!important;width:28px!important;height:28px!important;object-fit:contain!important;filter:grayscale(1)!important;opacity:.72!important}
+.league-gallery-item:has(.league-choice-badge) span,.league-gallery-item:has(.league-choice-badge) small{grid-column:2!important;grid-row:auto!important}
+.league-gallery-item.active .league-choice-badge{filter:none!important;opacity:1!important}
+.league-choice-grid .league-choice-mark{display:grid!important;place-items:center!important;width:27px!important;height:27px!important;border:1px solid #d8d8d4!important;border-radius:50%!important;color:#f3f3f1!important;font:700 7px/1 "DM Mono",monospace!important;font-style:normal!important;letter-spacing:0!important}
+.spoil-meter-dialog .league-choice-grid button:has(.league-choice-mark){grid-template-columns:29px minmax(0,1fr)!important;grid-template-rows:auto auto!important;align-items:center!important;column-gap:8px!important}.spoil-meter-dialog .league-choice-grid button:has(.league-choice-mark) .league-choice-mark{grid-column:1!important;grid-row:1 / span 2!important}.spoil-meter-dialog .league-choice-grid button:has(.league-choice-mark) b,.spoil-meter-dialog .league-choice-grid button:has(.league-choice-mark) span{grid-column:2!important}
+.card-league{display:inline-flex!important;align-items:center!important;align-self:flex-end!important;justify-content:flex-end!important;margin:0 0 3px auto!important;padding:1px 0 1px 6px!important;border-left:1px solid rgba(243,243,241,.35)!important;color:#d6d6d1!important;font:600 7px/1 "DM Mono",monospace!important;letter-spacing:.12em!important;white-space:nowrap!important}
+
+/* A baseball result begins with the familiar line score, then decisions and homers. */
+.baseball-scorecard,.football-scorecard{width:100%!important;min-width:0!important;margin:15px 0 2px!important;padding:12px 0!important;border-top:1px solid rgba(243,243,241,.17)!important;border-bottom:1px solid rgba(243,243,241,.12)!important;overflow-x:auto!important;scrollbar-width:thin!important}
+.baseball-linescore{min-width:max-content!important}.baseball-line-head,.baseball-line-row{display:grid!important;grid-auto-flow:column!important;grid-auto-columns:minmax(28px,1fr)!important;grid-template-columns:minmax(52px,1.5fr)!important;align-items:center!important;gap:2px!important;min-width:max-content!important}.baseball-line-head{padding:0 0 5px!important;color:#8f8f8a!important;font:8px/1 "DM Mono",monospace!important;letter-spacing:.04em!important}.baseball-line-head b{color:#969691!important;font-weight:400!important}.baseball-line-head i{font-style:normal!important;text-align:center!important}.baseball-line-head strong{color:#cacac5!important;font-weight:500!important;text-align:center!important}.baseball-line-row{padding:5px 0!important;border-top:1px solid rgba(243,243,241,.08)!important;font:10px/1.1 "DM Mono",monospace!important}.baseball-line-row>b{display:flex!important;align-items:center!important;gap:5px!important;color:#eeeeea!important;font-weight:600!important}.baseball-line-row b img{width:15px!important;height:15px!important;object-fit:contain!important}.baseball-line-row i,.baseball-line-row strong{text-align:center!important;font-style:normal!important;color:#c9c9c4!important}.baseball-line-row strong{color:#f1f1ed!important;font-weight:600!important}.baseball-decisions,.baseball-homers{display:flex!important;flex-wrap:wrap!important;gap:6px 14px!important;margin-top:10px!important;color:#bcbcb7!important;font:9px/1.4 Inter,Arial,sans-serif!important}.baseball-decisions b,.baseball-homers>b{color:#eeeeea!important;font:600 8px/1 "DM Mono",monospace!important;letter-spacing:.08em!important}.baseball-homers span{display:flex!important;align-items:center!important;gap:4px!important}.baseball-homers img{width:15px!important;height:15px!important;object-fit:contain!important}.baseball-homers span>b{font:600 8px "DM Mono",monospace!important;color:#dadad5!important}
+
+/* Football uses the same compact line-score grammar; its scoring timeline names the play. */
+.football-scorecard{display:grid!important;grid-auto-flow:row!important;gap:2px!important;overflow-x:auto!important}.football-line-head,.football-line-row{display:grid!important;grid-auto-flow:column!important;grid-auto-columns:minmax(34px,1fr)!important;grid-template-columns:minmax(58px,1.4fr)!important;align-items:center!important;gap:2px!important;min-width:max-content!important}.football-line-head{padding-bottom:5px!important;color:#8f8f8a!important;font:8px/1 "DM Mono",monospace!important}.football-line-head b{font-weight:400!important}.football-line-head i,.football-line-head strong{font-style:normal!important;text-align:center!important;font-weight:500!important}.football-line-row{padding:5px 0!important;border-top:1px solid rgba(243,243,241,.08)!important;font:10px/1.1 "DM Mono",monospace!important}.football-line-row>b{display:flex!important;align-items:center!important;gap:5px!important;color:#eeeeea!important}.football-line-row img{width:15px!important;height:15px!important;object-fit:contain!important}.football-line-row i,.football-line-row strong{text-align:center!important;font-style:normal!important;color:#c9c9c4!important}.football-line-row strong{color:#f1f1ed!important;font-weight:600!important}
+.incident.score{background:rgba(243,243,241,.06)!important;box-shadow:inset 2px 0 #d6d6d2!important}.incident.score .event-badge img{width:17px!important;height:17px!important;object-fit:contain!important}.incident.score .event-mark{font:600 8px "DM Mono",monospace!important;color:#e9e9e5!important}.score-label{display:inline-block!important;margin-right:5px!important;color:#f1f1ed!important;font:600 8px "DM Mono",monospace!important;letter-spacing:.08em!important}
+
+/* Baseball’s lineup is an order, not a football XI. */
+.baseball-lineups section{min-width:0!important}.baseball-lineups h4{margin-top:12px!important}.baseball-lineups .baseball-player em{color:#c9c9c5!important}.baseball-lineups .baseball-player:first-of-type em{font-weight:700!important;color:#f1f1ed!important}
+@media(max-width:650px){
+  .league-gallery-item:has(.league-choice-badge){grid-template-columns:25px minmax(0,1fr)!important}.league-gallery-item .league-choice-badge{width:24px!important;height:24px!important}
+  .card-league{font-size:6px!important}
+  .baseball-scorecard,.football-scorecard{margin-top:12px!important;padding:10px 0!important}.baseball-line-head,.baseball-line-row{grid-auto-columns:minmax(25px,1fr)!important;grid-template-columns:minmax(45px,1.35fr)!important}.football-line-head,.football-line-row{grid-auto-columns:minmax(29px,1fr)!important;grid-template-columns:minmax(50px,1.35fr)!important}
+}
+
+/* Controls use surface contrast, not a thicket of outlines. */
+.team-band-summary>.league-band-current{padding:4px 3px 4px 0!important;border:0!important;background:transparent!important;box-shadow:none!important}
+.team-band-summary>.league-band-current:hover{border:0!important;background:transparent!important;color:#fff!important}
+.match-tabs{gap:5px!important;padding:0!important;border:0!important;border-bottom:0!important;background:transparent!important}
+.match-tabs button,.list-meta button{border:0!important;border-right:0!important;border-bottom:0!important;border-radius:2px!important;background:rgba(243,243,241,.1)!important;color:#d9d9d4!important;box-shadow:none!important}
+.match-tabs button:hover,.list-meta button:hover{border:0!important;background:rgba(243,243,241,.18)!important;color:#fff!important}
+.match-tabs button.active,.list-game:has(.incident-list) .match-tabs [data-results],.list-game:has(.lineups) .match-tabs [data-lineup]{border:0!important;background:#e9e9e4!important;color:#151515!important;box-shadow:none!important}
+.match-tabs button:focus-visible,.list-meta button:focus-visible{outline:1px solid #f3f3ef!important;outline-offset:2px!important}
+
+/* Soccer results have one visual accent: goals. Cards retain their real meaning. */
+.soccer-game .incident{background:transparent!important;box-shadow:none!important}
+.soccer-game .incident.goal{background:rgba(243,243,241,.075)!important;box-shadow:inset 2px 0 #e8e8e2!important}
+.soccer-game .incident-mark.yellow,.soccer-game .card-glyph{background:#e3bc35!important;color:#181818!important}
+.soccer-game .incident-mark.red,.soccer-game .card-glyph.red{background:#d9564c!important;color:#fff!important}
+.soccer-game .player-event.yellow{color:#e3bc35!important}.soccer-game .player-event.red{color:#d9564c!important}
+
+/* The final score gets a single balanced, badge-led presentation. */
+.tab-final-score{margin:18px 0 7px!important;padding:10px 0 5px!important}
+.tab-final-score>span{display:flex!important;align-items:center!important;gap:6px!important;color:#a9a9a4!important;font:600 8px/1 "DM Mono",monospace!important;letter-spacing:.13em!important}
+.soccer-ball{width:15px!important;height:15px!important;color:#f1f1ed!important;flex:0 0 auto!important}
+.tab-final-score>.final-scoreline{display:grid!important;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)!important;align-items:center!important;gap:12px!important;margin-top:9px!important;color:#f1f1ed!important}
+.final-scoreline .final-club{display:flex!important;align-items:center!important;gap:7px!important;min-width:0!important;font:600 12px/1 Inter,Arial,sans-serif!important;color:#e4e4df!important}
+.final-scoreline .final-club.away{justify-content:flex-end!important;text-align:right!important}
+.final-scoreline .final-club img{width:24px!important;height:24px!important;flex:0 0 auto!important;object-fit:contain!important}
+.final-scoreline .final-club b{min-width:0!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;font:inherit!important}
+.final-scoreline>strong{color:#f5f5f1!important;font:600 30px/.86 Fraunces,Georgia,serif!important;letter-spacing:-1.5px!important;white-space:nowrap!important}
+.goal-scorers{margin-top:11px!important;padding-top:8px!important;border-top:1px solid rgba(243,243,241,.1)!important}
+@media(max-width:650px){.tab-final-score>.final-scoreline{gap:8px!important}.final-scoreline .final-club{gap:5px!important;font-size:11px!important}.final-scoreline .final-club img{width:21px!important;height:21px!important}.final-scoreline>strong{font-size:27px!important}}
+
+/* In the all-leagues feed, the competition rides with the score/countdown stamp. */
+.list-game>strong.match-stamp .stamp-league{position:absolute!important;z-index:4!important;top:5px!important;left:50%!important;display:block!important;transform:translateX(-50%)!important;color:#aaa9a4!important;font:600 6px/1 "DM Mono",monospace!important;font-style:normal!important;letter-spacing:.08em!important;line-height:1!important;white-space:nowrap!important;pointer-events:none!important}
+.list-game>strong.match-stamp.future .stamp-league,.list-game>strong.match-stamp.live .stamp-league{top:auto!important;bottom:4px!important;font-size:5px!important;letter-spacing:.06em!important}
+
+/* League emblems use a neutral paper chip: several official marks are designed
+   for light letterheads and would otherwise disappear into the black interface. */
+.league-band-logo,.league-gallery-item .league-choice-badge{
+  box-sizing:border-box!important;
+  padding:3px!important;
+  background:#d8d8d3!important;
+  border-radius:3px!important;
+  filter:none!important;
+  opacity:1!important;
+}
+.list-game>strong.match-stamp .stamp-league{
+  position:absolute!important;
+  z-index:5!important;
+  top:-7px!important;
+  right:-7px!important;
+  left:auto!important;
+  bottom:auto!important;
+  display:grid!important;
+  place-items:center!important;
+  width:18px!important;
+  height:18px!important;
+  margin:0!important;
+  padding:3px!important;
+  box-sizing:border-box!important;
+  transform:none!important;
+  overflow:hidden!important;
+  border:1px solid #777772!important;
+  border-radius:3px!important;
+  background:#d8d8d3!important;
+  box-shadow:0 1px 2px rgba(0,0,0,.35)!important;
+  pointer-events:none!important;
+}
+.list-game>strong.match-stamp .stamp-league img{
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  object-fit:contain!important;
+  filter:none!important;
+  opacity:1!important;
+}
+@media(max-width:650px){
+  .list-game>strong.match-stamp .stamp-league{top:-6px!important;right:-6px!important;width:17px!important;height:17px!important;padding:2px!important}
+}
+
+/* Baseball spoilers stay contained below the matchup, with a compact scorecard. */
+.baseball-game:not(.spoiled) .baseball-scorecard,.baseball-game:not(.spoiled) .baseball-scorecard+.incident-list{display:none!important}
+.baseball-game .baseball-scorecard{display:block!important;clear:both!important;width:100%!important;max-width:none!important;min-width:0!important;margin:18px 0 6px!important;padding:12px 0!important;overflow:hidden!important}
+.baseball-game .baseball-linescore{width:100%!important;min-width:0!important;overflow-x:auto!important;padding-bottom:2px!important}
+.baseball-game .baseball-line-head,.baseball-game .baseball-line-row{min-width:max-content!important;width:100%!important}
+.baseball-recap-meta{display:grid!important;grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr)!important;gap:12px 22px!important;width:100%!important;min-width:0!important;margin-top:12px!important;padding-top:10px!important;border-top:1px solid rgba(243,243,241,.1)!important}
+.baseball-decisions{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(125px,1fr))!important;gap:6px 12px!important;align-content:start!important;margin:0!important}
+.baseball-decisions>div{display:flex!important;align-items:baseline!important;gap:6px!important;min-width:0!important;color:#d6d6d1!important;font:10px/1.35 Inter,Arial,sans-serif!important}
+.baseball-decisions>div>b{flex:0 0 auto!important;color:#f1f1ed!important;font:600 8px/1 "DM Mono",monospace!important;letter-spacing:.08em!important}
+.baseball-decisions>div>span{min-width:0!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+.baseball-homers{display:grid!important;grid-template-columns:74px minmax(0,1fr)!important;align-items:start!important;gap:8px!important;margin:0!important;min-width:0!important}
+.baseball-homers>b{padding-top:2px!important;color:#aaa9a4!important;font:600 8px/1 "DM Mono",monospace!important;letter-spacing:.1em!important}
+.baseball-homers ul{display:flex!important;flex-wrap:wrap!important;gap:6px 14px!important;min-width:0!important;margin:0!important;padding:0!important;list-style:none!important}
+.baseball-homers li{display:grid!important;grid-template-columns:15px auto minmax(0,1fr)!important;align-items:center!important;gap:4px!important;min-width:0!important;color:#d6d6d1!important;font:10px/1.35 Inter,Arial,sans-serif!important}
+.baseball-homers li img{width:15px!important;height:15px!important;object-fit:contain!important}.baseball-homers li>b{color:#f1f1ed!important;font:600 8px/1 "DM Mono",monospace!important;letter-spacing:.06em!important}.baseball-homers li>span{min-width:0!important;white-space:nowrap!important}
+.baseball-game .incident-list{width:100%!important;max-width:none!important;min-width:0!important}
+@media(max-width:650px){.baseball-recap-meta{grid-template-columns:1fr!important;gap:11px!important}.baseball-decisions{grid-template-columns:repeat(2,minmax(0,1fr))!important}.baseball-homers{grid-template-columns:1fr!important;gap:7px!important}.baseball-homers ul{gap:6px 10px!important}}
+
+/* In the compact card grid, result blocks become direct grid children.
+   Baseball needs a full row instead of inheriting the narrow stamp column. */
+.list-game.baseball-game .baseball-scorecard,
+.list-game.baseball-game .baseball-scorecard + .incident-list{
+  grid-column:1 / -1!important;
+  justify-self:stretch!important;
+  align-self:start!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:none!important;
+}
+
+/* Older tab styling restored the final right edge; the surface buttons have no outline. */
+.match-tabs button:last-child,
+.match-tabs button.active:last-child{border-right:0!important}
+
+/* Expanded results stay in the primary card column on desktop. A legacy
+   incident selector was assigning them to the fixed-width date column. */
+@media(min-width:651px){
+  .list-game:has(.incident-list) > .list-content,
+  .list-game:has(.baseball-scorecard) > .list-content{
+    display:block!important;
+    grid-column:1!important;
+    grid-row:1!important;
+    width:auto!important;
+    min-width:0!important;
+    padding:3px 0 0 46px!important;
+  }
+}
+
+/* MLB results use a fixed scorecard table: innings always share one grid and
+   the two clubs are represented by their marks, not repeating long names. */
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;margin:-1px!important;padding:0!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important;border:0!important}
+.baseball-game table.baseball-linescore{display:table!important;table-layout:fixed!important;border-collapse:collapse!important;border-spacing:0!important;width:100%!important;min-width:0!important;margin:0!important;overflow:visible!important;color:#d8d8d3!important;font:11px/1 "DM Mono",monospace!important}
+.baseball-game .baseball-linescore th,.baseball-game .baseball-linescore td{height:34px!important;padding:0!important;text-align:center!important;vertical-align:middle!important;white-space:nowrap!important}
+.baseball-game .baseball-linescore thead th{height:30px!important;border-bottom:1px solid rgba(243,243,241,.16)!important;color:#999994!important;font-size:9px!important;font-weight:500!important}
+.baseball-game .baseball-linescore thead th:first-child,.baseball-game .baseball-linescore tbody th{width:42px!important}
+.baseball-game .baseball-linescore tbody tr+tr>*{border-top:1px solid rgba(243,243,241,.1)!important}
+.baseball-game .baseball-linescore tbody th{padding-right:8px!important;text-align:left!important}
+.baseball-game .baseball-linescore tbody th img{display:block!important;width:26px!important;height:26px!important;margin:auto!important;object-fit:contain!important}
+.baseball-game .baseball-linescore tbody th span{display:block!important;color:#e7e7e2!important;font-size:9px!important;text-align:center!important}
+.baseball-game .baseball-linescore .baseball-total{color:#f2f2ed!important;font-weight:700!important}
+.baseball-game .baseball-recap-meta{grid-template-columns:1fr!important;gap:15px!important;margin-top:14px!important;padding-top:12px!important}
+.baseball-game .baseball-decisions{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(155px,1fr))!important;gap:9px 16px!important;margin:0!important;padding-bottom:12px!important;border-bottom:1px solid rgba(243,243,241,.1)!important}
+.baseball-game .baseball-decision{display:grid!important;grid-template-columns:20px minmax(0,1fr)!important;gap:7px!important;align-items:start!important;min-width:0!important}
+.baseball-game .baseball-decision>b{padding-top:2px!important;color:#f1f1ed!important;font:700 9px/1 "DM Mono",monospace!important;letter-spacing:.08em!important}
+.baseball-game .baseball-decision>span{display:grid!important;gap:3px!important;min-width:0!important}
+.baseball-game .baseball-decision strong{overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;color:#ecece7!important;font:600 12px/1.15 Inter,Arial,sans-serif!important}
+.baseball-game .baseball-decision small{color:#989893!important;font:8px/1.35 "DM Mono",monospace!important;letter-spacing:.01em!important;white-space:normal!important}
+.baseball-game .baseball-homers{grid-template-columns:78px minmax(0,1fr)!important;gap:10px!important;margin:0!important}
+.baseball-game .baseball-homers ul{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(175px,1fr))!important;gap:8px 16px!important;width:100%!important}
+.baseball-game .baseball-homers li{grid-template-columns:22px minmax(0,1fr)!important;gap:7px!important;align-items:start!important}
+.baseball-game .baseball-homers li img{width:22px!important;height:22px!important}
+.baseball-game .baseball-homers li span{display:grid!important;gap:2px!important;min-width:0!important}
+.baseball-game .baseball-homers li strong{overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;color:#e5e5e0!important;font:600 11px/1.2 Inter,Arial,sans-serif!important}
+.baseball-game .baseball-homers li small{color:#989893!important;font:8px/1.2 "DM Mono",monospace!important;letter-spacing:.04em!important}
+@media(max-width:650px){
+  .baseball-game .baseball-linescore th,.baseball-game .baseball-linescore td{height:30px!important;font-size:9px!important}
+  .baseball-game .baseball-linescore thead th{font-size:8px!important}.baseball-game .baseball-linescore thead th:first-child,.baseball-game .baseball-linescore tbody th{width:32px!important}.baseball-game .baseball-linescore tbody th img{width:21px!important;height:21px!important}
+  .baseball-game .baseball-decisions{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}.baseball-game .baseball-homers{grid-template-columns:1fr!important;gap:7px!important}.baseball-game .baseball-homers ul{grid-template-columns:1fr!important}
+}
+
+/* The table and the two recap sections provide all needed separation. */
+.baseball-game .baseball-scorecard{border-top:0!important;border-bottom:0!important;padding-top:0!important;padding-bottom:0!important}

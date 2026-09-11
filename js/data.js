@@ -1,10 +1,11 @@
 window.EPLData = (() => {
+  const leagueBadge = label => `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><circle cx="32" cy="32" r="29" fill="#242424" stroke="#e8e8e4" stroke-width="2"/><text x="32" y="36" fill="#f3f3f1" font-family="Arial,sans-serif" font-size="${label.length > 3 ? 17 : 20}" font-weight="700" text-anchor="middle">${label}</text></svg>`)}`;
   const LEAGUES = {
-    epl: { id: 'epl', sport: 'soccer', slug: 'eng.1', name: 'Premier League', shortName: 'PREMIER LEAGUE', logo: 'https://a.espncdn.com/i/leaguelogos/soccer/500/eng.1.png' },
-    laliga: { id: 'laliga', sport: 'soccer', slug: 'esp.1', name: 'La Liga', shortName: 'LA LIGA', logo: 'https://a.espncdn.com/i/leaguelogos/soccer/500/esp.1.png' },
-    ucl: { id: 'ucl', sport: 'soccer', slug: 'uefa.champions', name: 'UEFA Champions League', shortName: 'CHAMPIONS LEAGUE', logo: 'https://a.espncdn.com/i/leaguelogos/soccer/500/uefa.champions.png' },
-    mlb: { id: 'mlb', sport: 'baseball', slug: 'mlb', name: 'Major League Baseball', shortName: 'MLB', logo: 'https://a.espncdn.com/i/leaguelogos/mlb/500/mlb.png', pastCap: 54, futureCap: 110 },
-    nfl: { id: 'nfl', sport: 'football', slug: 'nfl', name: 'National Football League', shortName: 'NFL', logo: 'https://a.espncdn.com/i/leaguelogos/nfl/500/nfl.png' }
+    epl: { id: 'epl', sport: 'soccer', slug: 'eng.1', name: 'Premier League', shortName: 'PREMIER LEAGUE', logo: 'assets/leagues/epl.svg' },
+    laliga: { id: 'laliga', sport: 'soccer', slug: 'esp.1', name: 'La Liga', shortName: 'LA LIGA', logo: 'assets/leagues/laliga.svg' },
+    ucl: { id: 'ucl', sport: 'soccer', slug: 'uefa.champions', name: 'UEFA Champions League', shortName: 'CHAMPIONS LEAGUE', logo: 'assets/leagues/ucl.svg' },
+    mlb: { id: 'mlb', sport: 'baseball', slug: 'mlb', name: 'Major League Baseball', shortName: 'MLB', logo: 'assets/leagues/mlb.svg', pastCap: 54, futureCap: 110 },
+    nfl: { id: 'nfl', sport: 'football', slug: 'nfl', name: 'National Football League', shortName: 'NFL', logo: 'assets/leagues/nfl.svg' }
   };
   const MLB_BASE = 'https://statsapi.mlb.com/api/v1', MLB_LIVE = 'https://statsapi.mlb.com/api/v1.1';
   let activeLeague = 'epl';
@@ -18,9 +19,14 @@ window.EPLData = (() => {
   const soccerDateRange = () => { const now = new Date(), start = new Date(now), end = new Date(now); start.setDate(now.getDate() - 50); end.setDate(now.getDate() + 80); return `${formatSoccerDate(start)}-${formatSoccerDate(end)}`; };
   const mlbWindow = () => { const now = new Date(), start = new Date(now), end = new Date(now); start.setDate(now.getDate() - 3); end.setDate(now.getDate() + 7); return { startDate: formatMlbDate(start), endDate: formatMlbDate(end) }; };
   const isLiveStatus = status => { const type = status?.type || status || {}, name = String(type.name || status?.name || ''); return type.state === 'in' || status?.state === 'in' || /^STATUS_(?:FIRST|SECOND|HALF|EXTRA|IN_PROGRESS)/.test(name); };
-  // deck.gl's IconLayer cannot rasterize MLB's dimensionless SVG marks reliably.
-  // ESPN's scoreboard PNGs preserve the same club identity for both the map and list.
-  const mlbLogo = team => team?.abbreviation ? `https://a.espncdn.com/i/teamlogos/mlb/500/${String(team.abbreviation).toLowerCase()}.png` : '';
+  // MLB's own badges are dependable in standard document images. The map filters
+  // these SVGs separately because deck.gl's bitmap icon loader needs dimensions.
+  const mlbLogo = id => id ? `https://www.mlbstatic.com/team-logos/${id}.svg` : '';
+  const MLB_MAP_CODES = { 108: 'laa', 109: 'ari', 110: 'bal', 111: 'bos', 112: 'chc', 113: 'cin', 114: 'cle', 115: 'col', 116: 'det', 117: 'hou', 118: 'kc', 119: 'lad', 120: 'wsh', 121: 'nym', 133: 'ath', 134: 'pit', 135: 'sd', 136: 'sea', 137: 'sf', 138: 'stl', 139: 'tb', 140: 'tex', 141: 'tor', 142: 'min', 143: 'phi', 144: 'atl', 145: 'chw', 146: 'mia', 147: 'nyy', 158: 'mil' };
+  const mlbMapLogo = (id, abbreviation) => {
+    const code = MLB_MAP_CODES[Number(id)] || { AZ: 'ari', CWS: 'chw' }[String(abbreviation || '').toUpperCase()] || String(abbreviation || '').toLowerCase();
+    return code ? `https://a.espncdn.com/i/teamlogos/mlb/500/${code}.png` : '';
+  };
 
   function normalize(event, league = LEAGUES[activeLeague]) {
     const competition = event.competitions?.[0], teams = competition?.competitors || [], home = teams.find(team => team.homeAway === 'home'), away = teams.find(team => team.homeAway === 'away');
@@ -33,7 +39,7 @@ window.EPLData = (() => {
     const home = game.teams?.home, away = game.teams?.away, status = game.status || {};
     if (!home?.team || !away?.team) return null;
     const completed = status.abstractGameState === 'Final', live = status.abstractGameState === 'Live', scored = completed || live;
-    return { id: String(game.gamePk), sport: 'baseball', leagueId: league.id, league: league.name, leagueLogo: league.logo, time: new Date(game.gameDate), home: clean(home.team.name), away: clean(away.team.name), homeId: String(home.team.id), awayId: String(away.team.id), homeAbbr: home.team.abbreviation, awayAbbr: away.team.abbreviation, homeLogo: mlbLogo(home.team), awayLogo: mlbLogo(away.team), homeColor: '#77736a', awayColor: '#b5b5b0', homeScore: scored ? Number(home.score) : null, awayScore: scored ? Number(away.score) : null, completed, live, venue: clean(game.venue?.name), status: status.detailedState || status.abstractGameState || '', probableHomePitcher: home.probablePitcher || null, probableAwayPitcher: away.probablePitcher || null, gameNumber: game.gameNumber, doubleHeader: game.doubleHeader, events: [], raw: game };
+    return { id: String(game.gamePk), sport: 'baseball', leagueId: league.id, league: league.name, leagueLogo: league.logo, time: new Date(game.gameDate), home: clean(home.team.name), away: clean(away.team.name), homeId: String(home.team.id), awayId: String(away.team.id), homeAbbr: home.team.abbreviation, awayAbbr: away.team.abbreviation, homeLogo: mlbLogo(home.team.id), awayLogo: mlbLogo(away.team.id), homeMapLogo: mlbMapLogo(home.team.id, home.team.abbreviation), awayMapLogo: mlbMapLogo(away.team.id, away.team.abbreviation), homeColor: '#77736a', awayColor: '#b5b5b0', homeScore: scored ? Number(home.score) : null, awayScore: scored ? Number(away.score) : null, completed, live, venue: clean(game.venue?.name), status: status.detailedState || status.abstractGameState || '', probableHomePitcher: home.probablePitcher || null, probableAwayPitcher: away.probablePitcher || null, gameNumber: game.gameNumber, doubleHeader: game.doubleHeader, events: [], raw: game };
   }
 
   const addSoccerContext = (games, ranks) => games.forEach(game => {
@@ -120,10 +126,11 @@ window.EPLData = (() => {
   function enrichMlbRoster(game, feed) {
     const sides = feed.liveData?.boxscore?.teams || {}, entries = Object.entries(sides);
     game.rosters = entries.map(([side, team]) => {
-      const order = new Set((team.battingOrder || []).map(String)), bench = new Set((team.bench || []).map(String)), bullpen = new Set((team.bullpen || []).map(String)), people = Object.values(team.players || {});
-      const roster = people.map(item => ({ athlete: { id: item.person?.id, displayName: item.person?.fullName, fullName: item.person?.fullName, jersey: item.jerseyNumber, position: { abbreviation: item.position?.abbreviation || item.position?.code || '' }, birthDate: item.person?.birthDate }, jersey: item.jerseyNumber, position: { abbreviation: item.position?.abbreviation || item.position?.code || '' }, starter: order.has(String(item.person?.id)), substitute: bench.has(String(item.person?.id)) || bullpen.has(String(item.person?.id)) }));
+      const battingOrder = (team.battingOrder || []).map(String), order = new Set(battingOrder), bench = new Set((team.bench || []).map(String)), bullpen = new Set((team.bullpen || []).map(String)), people = Object.values(team.players || {});
+      const roster = people.map(item => ({ athlete: { id: item.person?.id, displayName: item.person?.fullName, fullName: item.person?.fullName, jersey: item.jerseyNumber, position: { abbreviation: item.position?.abbreviation || item.position?.code || '' }, birthDate: item.person?.birthDate }, jersey: item.jerseyNumber, position: { abbreviation: item.position?.abbreviation || item.position?.code || '' }, starter: order.has(String(item.person?.id)), substitute: bench.has(String(item.person?.id)) || bullpen.has(String(item.person?.id)), battingOrder: battingOrder.indexOf(String(item.person?.id)), pitching: item.stats?.pitching || {} }));
       const source = side === 'home' ? { id: game.homeId, abbreviation: game.homeAbbr, logo: game.homeLogo } : { id: game.awayId, abbreviation: game.awayAbbr, logo: game.awayLogo };
-      return { team: source, roster, starters: roster.filter(player => player.starter), substitutes: roster.filter(player => player.substitute) };
+      const startingPitcher = roster.find(player => Number(player.pitching?.gamesStarted) > 0) || roster.find(player => player.position?.abbreviation === 'P' && !player.substitute) || null;
+      return { team: source, roster, starters: roster.filter(player => player.starter).sort((a, b) => a.battingOrder - b.battingOrder), substitutes: roster.filter(player => player.substitute), startingPitcher };
     });
     game.lineupAvailable = entries.length === 2 && entries.every(([, team]) => (team.battingOrder || []).length === 9);
   }
@@ -136,8 +143,29 @@ window.EPLData = (() => {
       if (game.completed || game.live) { game.homeScore = Number(sides.home?.runs ?? game.homeScore ?? 0); game.awayScore = Number(sides.away?.runs ?? game.awayScore ?? 0); }
       game.probableHomePitcher = feed.gameData?.probablePitchers?.home || game.probableHomePitcher; game.probableAwayPitcher = feed.gameData?.probablePitchers?.away || game.probableAwayPitcher;
       enrichMlbRoster(game, feed);
-      game.events = (feed.liveData?.plays?.allPlays || []).filter(play => play.about?.isScoringPlay).map(play => ({ type: 'run', minute: Number(play.about?.inning || 0), inning: play.about?.inning, half: play.about?.halfInning, text: clean(play.result?.description), teamId: String(play.team?.id || ''), scorer: clean(play.matchup?.batter?.fullName), homeScore: Number(play.result?.homeScore), awayScore: Number(play.result?.awayScore), rbi: Number(play.result?.rbi || 0), captivating: Number(play.about?.captivatingIndex || 0) }));
+      const allPlays = feed.liveData?.plays?.allPlays || [];
+      game.events = allPlays.filter(play => play.about?.isScoringPlay).map(play => ({ type: 'run', minute: Number(play.about?.inning || 0), inning: play.about?.inning, half: play.about?.halfInning, text: clean(play.result?.description), teamId: String(play.team?.id || ''), scorer: clean(play.matchup?.batter?.fullName), homeScore: Number(play.result?.homeScore), awayScore: Number(play.result?.awayScore), rbi: Number(play.result?.rbi || 0), captivating: Number(play.about?.captivatingIndex || 0) }));
       game.summary = { boxscore: { teams: Object.entries(sides).map(([side]) => ({ team: { id: side === 'home' ? game.homeId : game.awayId }, statistics: flattenStats(feed.liveData?.boxscore?.teams?.[side]) })) } };
+      const decisionName = value => clean(value?.fullName || value?.fullNameDisplay || value?.lastInitName || value?.name);
+      const decisions = feed.liveData?.decisions || feed.gameData?.decisions || {};
+      const boxscoreTeams = feed.liveData?.boxscore?.teams || {};
+      const playerCards = Object.values(boxscoreTeams).flatMap(team => Object.values(team?.players || {}));
+      const batterContext = new Map(Object.entries(boxscoreTeams).flatMap(([side, team]) => Object.values(team?.players || {}).map(player => [String(player?.person?.id || player?.id || ''), { teamId: side === 'home' ? game.homeId : game.awayId, seasonHomeRuns: Number(player?.seasonStats?.batting?.homeRuns) }])));
+      const pitcherLine = decision => {
+        const name = decisionName(decision);
+        const decisionId = String(decision?.id || decision?.person?.id || '');
+        const card = playerCards.find(player => String(player?.person?.id || player?.id || '') === decisionId) || playerCards.find(player => decisionName(player?.person) === name);
+        const pitching = card?.stats?.pitching || {};
+        return [['IP', pitching.inningsPitched], ['H', pitching.hits], ['R', pitching.runs], ['ER', pitching.earnedRuns], ['BB', pitching.baseOnBalls], ['K', pitching.strikeOuts]].filter(([, value]) => value !== undefined && value !== null && value !== '').map(([label, value]) => `${label} ${value}`).join(' · ');
+      };
+      game.mlbRecap = {
+        winner: decisionName(decisions.winner), loser: decisionName(decisions.loser), save: decisionName(decisions.save),
+        winnerLine: pitcherLine(decisions.winner), loserLine: pitcherLine(decisions.loser), saveLine: pitcherLine(decisions.save),
+        homeRuns: allPlays.filter(play => /home run/i.test(String(play.result?.event || play.result?.description || ''))).map(play => { const batter = batterContext.get(String(play.matchup?.batter?.id || '')); return { teamId: String(batter?.teamId || play.team?.id || ''), batter: clean(play.matchup?.batter?.fullName), inning: Number(play.about?.inning || 0), total: Number(play.result?.rbi || 0), seasonHomeRuns: Number.isFinite(batter?.seasonHomeRuns) ? batter.seasonHomeRuns : null }; }),
+        innings: (linescore.innings || []).map(inning => ({ away: inning.away?.runs, home: inning.home?.runs })),
+        away: { runs: Number(sides.away?.runs ?? game.awayScore ?? 0), hits: Number(sides.away?.hits ?? 0), errors: Number(sides.away?.errors ?? 0) },
+        home: { runs: Number(sides.home?.runs ?? game.homeScore ?? 0), hits: Number(sides.home?.hits ?? 0), errors: Number(sides.home?.errors ?? 0) }
+      };
       if (game.completed) game.scoreResult = mlbScore(game, feed);
       game._enriched = true;
     } catch (error) { console.warn('Could not enrich MLB game', error); }
@@ -162,7 +190,7 @@ window.EPLData = (() => {
         if (!substitutes.length && starters.length) { const starterIds = new Set(starters.map(entry => { const player = entry.athlete || entry; return String(player.id || player.uid || player.displayName || player.fullName); })); substitutes = players.filter(entry => { const player = entry.athlete || entry; return !starterIds.has(String(player.id || player.uid || player.displayName || player.fullName)); }); }
         return { ...roster, roster: players, starters, substitutes };
       });
-      game.events = plays.map(play => { const text = clean(play.text || play.shortText || play.description), clock = String(play.clock?.displayValue || ''), participants = play.participants || [], minute = Number((clock || text).match(/\d+/)?.[0]), type = game.sport === 'football' ? 'goal' : /goal/i.test(text) ? 'goal' : /red card/i.test(text) ? 'red' : /yellow card/i.test(text) ? 'yellow' : /penalty/i.test(text) ? 'penalty' : /substitution|replaces/i.test(text) ? 'sub' : /injur/i.test(text) ? 'injury' : 'other'; return { type, minute: Number.isFinite(minute) ? minute : null, period: play.period?.number || play.period, stoppage: /(?:45|90)\+\d+/.test(clock) || /(?:45|90)\+\d+/.test(text), text, teamId: String(play.team?.id || participants[0]?.team?.id || ''), players: participants.map(participant => clean(participant.athlete?.displayName || participant.displayName)).filter(Boolean), scorer: clean(participants[0]?.athlete?.displayName), assist: clean(play.assist?.athlete?.displayName), homeScore: Number.isFinite(Number(play.homeScore)) ? Number(play.homeScore) : null, awayScore: Number.isFinite(Number(play.awayScore)) ? Number(play.awayScore) : null, ownGoal: /own goal/i.test(text) }; });
+      game.events = plays.map(play => { const text = clean(play.text || play.shortText || play.description), footballDetail=`${text} ${play.type?.text||''} ${play.scoringType?.name||''} ${play.scoringType?.displayName||''}`, clock = String(play.clock?.displayValue || ''), participants = play.participants || [], minute = Number((clock || text).match(/\d+/)?.[0]), footballLabel = /touchdown/i.test(footballDetail) ? 'TOUCHDOWN' : /field.goal/i.test(footballDetail) ? 'FIELD GOAL' : /extra point|two.point/i.test(footballDetail) ? 'EXTRA POINT' : /safety/i.test(footballDetail) ? 'SAFETY' : 'SCORE', type = game.sport === 'football' ? 'score' : /goal/i.test(text) ? 'goal' : /red card/i.test(text) ? 'red' : /yellow card/i.test(text) ? 'yellow' : /penalty/i.test(text) ? 'penalty' : /substitution|replaces/i.test(text) ? 'sub' : /injur/i.test(text) ? 'injury' : 'other'; return { type, scoreLabel: game.sport === 'football' ? footballLabel : '', minute: Number.isFinite(minute) ? minute : null, clock, period: play.period?.number || play.period, stoppage: /(?:45|90)\+\d+/.test(clock) || /(?:45|90)\+\d+/.test(text), text, teamId: String(play.team?.id || participants[0]?.team?.id || ''), players: participants.map(participant => clean(participant.athlete?.displayName || participant.displayName)).filter(Boolean), scorer: clean(participants[0]?.athlete?.displayName), assist: clean(play.assist?.athlete?.displayName), homeScore: Number.isFinite(Number(play.homeScore)) ? Number(play.homeScore) : null, awayScore: Number.isFinite(Number(play.awayScore)) ? Number(play.awayScore) : null, ownGoal: /own goal/i.test(text) }; });
       if (game.sport === 'football' && game.completed) game.scoreResult = nflScore(game, summary);
       game._enriched = true;
     } catch (error) { console.warn('Could not enrich match', error); }
