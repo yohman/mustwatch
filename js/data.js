@@ -1,11 +1,11 @@
 window.EPLData = (() => {
   const leagueBadge = label => `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><circle cx="32" cy="32" r="29" fill="#242424" stroke="#e8e8e4" stroke-width="2"/><text x="32" y="36" fill="#f3f3f1" font-family="Arial,sans-serif" font-size="${label.length > 3 ? 17 : 20}" font-weight="700" text-anchor="middle">${label}</text></svg>`)}`;
   const LEAGUES = {
-    epl: { id: 'epl', sport: 'soccer', slug: 'eng.1', name: 'Premier League', shortName: 'PREMIER LEAGUE', logo: 'assets/leagues/epl.svg' },
-    laliga: { id: 'laliga', sport: 'soccer', slug: 'esp.1', name: 'La Liga', shortName: 'LA LIGA', logo: 'assets/leagues/laliga.svg' },
-    ucl: { id: 'ucl', sport: 'soccer', slug: 'uefa.champions', name: 'UEFA Champions League', shortName: 'CHAMPIONS LEAGUE', logo: 'assets/leagues/ucl.svg' },
-    mlb: { id: 'mlb', sport: 'baseball', slug: 'mlb', name: 'Major League Baseball', shortName: 'MLB', logo: 'assets/leagues/mlb.svg', pastCap: 54, futureCap: 110 },
-    nfl: { id: 'nfl', sport: 'football', slug: 'nfl', name: 'National Football League', shortName: 'NFL', logo: 'assets/leagues/nfl.svg' }
+    epl: { id: 'epl', sport: 'soccer', slug: 'eng.1', name: 'Premier League', shortName: 'PREMIER LEAGUE', logo: 'assets/leagues/epl-official.png' },
+    laliga: { id: 'laliga', sport: 'soccer', slug: 'esp.1', name: 'La Liga', shortName: 'LA LIGA', logo: 'assets/leagues/laliga-official.png' },
+    ucl: { id: 'ucl', sport: 'soccer', slug: 'uefa.champions', name: 'UEFA Champions League', shortName: 'CHAMPIONS LEAGUE', logo: 'assets/leagues/ucl-official.png' },
+    mlb: { id: 'mlb', sport: 'baseball', slug: 'mlb', name: 'Major League Baseball', shortName: 'MLB', logo: 'assets/leagues/mlb-official.png', pastCap: 54, futureCap: 110 },
+    nfl: { id: 'nfl', sport: 'football', slug: 'nfl', name: 'National Football League', shortName: 'NFL', logo: 'assets/leagues/nfl-official.png' }
   };
   const MLB_BASE = 'https://statsapi.mlb.com/api/v1', MLB_LIVE = 'https://statsapi.mlb.com/api/v1.1';
   let activeLeague = 'epl';
@@ -190,7 +190,22 @@ window.EPLData = (() => {
         if (!substitutes.length && starters.length) { const starterIds = new Set(starters.map(entry => { const player = entry.athlete || entry; return String(player.id || player.uid || player.displayName || player.fullName); })); substitutes = players.filter(entry => { const player = entry.athlete || entry; return !starterIds.has(String(player.id || player.uid || player.displayName || player.fullName)); }); }
         return { ...roster, roster: players, starters, substitutes };
       });
-      game.events = plays.map(play => { const text = clean(play.text || play.shortText || play.description), footballDetail=`${text} ${play.type?.text||''} ${play.scoringType?.name||''} ${play.scoringType?.displayName||''}`, clock = String(play.clock?.displayValue || ''), participants = play.participants || [], minute = Number((clock || text).match(/\d+/)?.[0]), footballLabel = /touchdown/i.test(footballDetail) ? 'TOUCHDOWN' : /field.goal/i.test(footballDetail) ? 'FIELD GOAL' : /extra point|two.point/i.test(footballDetail) ? 'EXTRA POINT' : /safety/i.test(footballDetail) ? 'SAFETY' : 'SCORE', type = game.sport === 'football' ? 'score' : /goal/i.test(text) ? 'goal' : /red card/i.test(text) ? 'red' : /yellow card/i.test(text) ? 'yellow' : /penalty/i.test(text) ? 'penalty' : /substitution|replaces/i.test(text) ? 'sub' : /injur/i.test(text) ? 'injury' : 'other'; return { type, scoreLabel: game.sport === 'football' ? footballLabel : '', minute: Number.isFinite(minute) ? minute : null, clock, period: play.period?.number || play.period, stoppage: /(?:45|90)\+\d+/.test(clock) || /(?:45|90)\+\d+/.test(text), text, teamId: String(play.team?.id || participants[0]?.team?.id || ''), players: participants.map(participant => clean(participant.athlete?.displayName || participant.displayName)).filter(Boolean), scorer: clean(participants[0]?.athlete?.displayName), assist: clean(play.assist?.athlete?.displayName), homeScore: Number.isFinite(Number(play.homeScore)) ? Number(play.homeScore) : null, awayScore: Number.isFinite(Number(play.awayScore)) ? Number(play.awayScore) : null, ownGoal: /own goal/i.test(text) }; });
+      game.events = plays.map(play => {
+        const text = clean(play.text || play.shortText || play.description), footballDetail=`${text} ${play.type?.text||''} ${play.scoringType?.name||''} ${play.scoringType?.displayName||''}`, clock = String(play.clock?.displayValue || ''), participants = play.participants || [], minute = Number((clock || text).match(/\d+/)?.[0]), footballLabel = /touchdown/i.test(footballDetail) ? 'TOUCHDOWN' : /field.goal/i.test(footballDetail) ? 'FIELD GOAL' : /extra point|two.point/i.test(footballDetail) ? 'EXTRA POINT' : /safety/i.test(footballDetail) ? 'SAFETY' : 'SCORE', type = game.sport === 'football' ? 'score' : /goal/i.test(text) ? 'goal' : /red card/i.test(text) ? 'red' : /yellow card/i.test(text) ? 'yellow' : /penalty/i.test(text) ? 'penalty' : /substitution|replaces/i.test(text) ? 'sub' : /injur/i.test(text) ? 'injury' : 'other';
+        const participantName = participant => clean(participant?.athlete?.displayName || participant?.displayName);
+        const participantRole = participant => String(participant?.role || participant?.type?.text || participant?.type?.displayName || participant?.type || '').toLowerCase();
+        const canonical = value => String(value || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+        const announcedAssist = clean(play.assist?.athlete?.displayName || play.assist?.displayName || (text.match(/assisted by\s+([^,.()]+?)(?:[,.]|$)/i) || [])[1]);
+        const isAssistant = participant => /assist/.test(participantRole(participant)) || (!!announcedAssist && canonical(participantName(participant)) === canonical(announcedAssist));
+        // ESPN may list both scorer and assister as participants.  Goal annotations
+        // must stay spoiler-accurate, so choose only the scorer and never the full
+        // participant list for a goal.
+        const scorerParticipant = type === 'goal'
+          ? participants.find(participant => /scor|goal/.test(participantRole(participant)) && !isAssistant(participant)) || participants.find(participant => !isAssistant(participant)) || null
+          : participants[0] || null;
+        const scorer = participantName(scorerParticipant);
+        return { type, scoreLabel: game.sport === 'football' ? footballLabel : '', minute: Number.isFinite(minute) ? minute : null, clock, period: play.period?.number || play.period, stoppage: /(?:45|90)\+\d+/.test(clock) || /(?:45|90)\+\d+/.test(text), text, teamId: String(play.team?.id || scorerParticipant?.team?.id || participants[0]?.team?.id || ''), players: type === 'goal' ? (scorer ? [scorer] : []) : participants.map(participantName).filter(Boolean), scorer, assist: announcedAssist, homeScore: Number.isFinite(Number(play.homeScore)) ? Number(play.homeScore) : null, awayScore: Number.isFinite(Number(play.awayScore)) ? Number(play.awayScore) : null, ownGoal: /own goal/i.test(text) };
+      });
       if (game.sport === 'football' && game.completed) game.scoreResult = nflScore(game, summary);
       game._enriched = true;
     } catch (error) { console.warn('Could not enrich match', error); }
